@@ -403,20 +403,22 @@ function say(parts,el){
     let done=false;
     const fin=()=>{if(done)return;done=true;clearTimeout(tm);if(id===sayId){talker&&talker.classList.remove('talk');setTimeout(step,opt.gap??140)}};
     const tm=setTimeout(fin,1400+t.length*(lang==='ko'?190:150));
-    u.onend=fin;u.onerror=fin;
+    u.onend=fin;u.onerror=e=>{lastErr=e&&e.error||'error';fin()};
     u.onstart=()=>{spokeOnce=true;if(id!==sayId)return;talker&&talker.classList.add('talk');opt.onstart&&opt.onstart()};
+    try{synth.resume()}catch(e){}
     synth.speak(u);
   };
   // iOS는 사용자 터치 직후 바로 speak()해야 소리가 나므로, 재생 중이 아닐 땐 즉시 시작
-  if(busy)setTimeout(step,80);else step();
+  if(busy)setTimeout(step,isIOS?80:0);else step();
 }
 /* 첫 터치에서 오디오·음성 잠금 해제 (iOS/모바일 웹뷰 대응) */
-let audioOn=false;
+let audioOn=false,lastErr='';
+const isIOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 function unlockAudio(){
   try{if(navigator.audioSession)navigator.audioSession.type='playback'}catch(e){}
   const a=actx();
   if(a&&!audioOn){try{const b=a.createBuffer(1,1,22050),s=a.createBufferSource();s.buffer=b;s.connect(a.destination);s.start(0)}catch(e){}}
-  if(synth&&!audioOn){try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;synth.speak(u)}catch(e){}}
+  if(synth&&!audioOn&&isIOS){try{const u=new SpeechSynthesisUtterance('hi');u.volume=0;synth.speak(u)}catch(e){}}
   audioOn=true;
 }
 addEventListener('touchend',unlockAudio,{passive:true});
@@ -469,11 +471,13 @@ $('#spBtn').onclick=()=>{S.spell=S.spell==='sound'?'name':'sound';save();renderH
 $('#testBtn').onclick=()=>{
   unlockAudio();sfx.win();
   if(!synth){toast('효과음이 들리면 정상이에요. 이 화면은 음성 읽기를 지원하지 않아요. 사파리나 크롬에서 열어 주세요.');return}
-  spokeOnce=false;
+  spokeOnce=false;lastErr='';pickVoices();
   say([['Hello!','en'],['소리 잘 들려?','ko']],$('#path .guide .critter')||null);
   setTimeout(()=>{
-    if(spokeOnce)toast('음성이 정상이에요! 효과음만 안 들리면 아이폰 무음 스위치를 꺼 주세요.');
-    else toast('음성이 재생되지 않았어요. 아이폰이면 무음 모드를 끄고, 그래도 안 되면 링크를 사파리나 크롬에서 열어 주세요.');
+    const n=synth.getVoices().length,info=`[음성 ${n}개 · 영어 ${V.en?V.en.name:'없음'} · 한국어 ${V.ko?'있음':'없음'} · 효과음 ${ac?ac.state:'없음'}${lastErr?' · 오류 '+lastErr:''}]`;
+    if(spokeOnce)toast('음성이 정상이에요! 소리가 작으면 기기 볼륨을 올려 주세요. '+info);
+    else if(n===0)toast('이 브라우저에 설치된 음성이 없어요. 기기 설정에서 음성 출력(TTS) 엔진을 확인해 주세요. '+info);
+    else toast('음성이 재생되지 않았어요. 볼륨과 무음 모드를 확인해 주세요. '+info);
   },2500);
 };
 document.addEventListener('click',e=>{
