@@ -325,6 +325,13 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 .capy.right .dust{left:-30px}
 .capy.left .dust{right:-30px;transform:scaleX(-1)}
 .capy.jumpy .cb{animation:capyJump .5s ease-in-out infinite}
+.capy .cbub.small{font-size:16px;padding:2px 8px;border-width:2px}
+.capy.approach{left:var(--x);top:46vh;width:180px;animation:approach 2.3s cubic-bezier(.5,0,.7,1) forwards}
+.capy.approach .cb{animation:waddle .3s ease-in-out infinite alternate}
+.capy.approach .cbub{opacity:0;animation:bubIn 2.3s forwards}
+@keyframes approach{0%{transform:translate(-50%,-50%) scale(.06);opacity:0;filter:blur(2px)}12%{opacity:1;filter:blur(0)}75%{transform:translate(-50%,-50%) scale(1.15);opacity:1}88%{transform:translate(-50%,-50%) scale(1.3);opacity:1}100%{transform:translate(-50%,-50%) scale(1.9);opacity:0}}
+@keyframes waddle{from{transform:rotate(-5deg) translateY(0)}to{transform:rotate(5deg) translateY(-6px)}}
+@keyframes bubIn{0%,45%{opacity:0;transform:translateX(-50%) scale(.5)}55%{opacity:1;transform:translateX(-50%) scale(1.1)}60%,90%{opacity:1;transform:translateX(-50%) scale(1)}100%{opacity:0}}
 @keyframes runR{from{transform:translateX(-220px)}to{transform:translateX(calc(100vw + 60px))}}
 @keyframes runL{from{transform:translateX(calc(100vw + 60px))}to{transform:translateX(-220px)}}
 @keyframes capyHop{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-8px) rotate(2deg)}}
@@ -652,7 +659,7 @@ addEventListener('pointerdown',unlockAudio);
 /* ================= 칭찬 카피바라 =================
    정답을 맞히면 귤을 머리에 얹은 카피바라가 화면을 휙 가로질러 달려가며 칭찬. 콤보가 쌓이면 2~3마리가 줄지어 달림 */
 const CAPY_PRAISE=['최고야!','대단해!','천재다!','완벽해!','우와~!','잘했어!','Great!','Good job!','Awesome!'];
-function capySVG(){
+function capySVG(baby){
   return `<svg viewBox="0 0 170 120" aria-hidden="true">
   <g class="leg a"><rect x="40" y="84" width="14" height="22" rx="7" fill="#7A4E28"/></g>
   <g class="leg b"><rect x="60" y="86" width="14" height="20" rx="7" fill="#6B4423"/></g>
@@ -668,29 +675,67 @@ function capySVG(){
   <path d="M124 46 q5 -5 10 0" stroke="#2A1A0C" stroke-width="3.2" fill="none" stroke-linecap="round"/>
   <circle cx="128" cy="60" r="5" fill="#FF8FA3" opacity=".55"/>
   <path d="M146 66 q5 4 10 0" stroke="#3B2412" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-  <circle cx="128" cy="22" r="11" fill="#FFA62B"/><circle cx="125" cy="19" r="3" fill="#FFD08A"/>
-  <path d="M128 11 q6 -7 12 -3 q-6 5 -12 3z" fill="#4CAF50"/>
+  ${baby?`<path d="M126 24 q-2 -10 4 -14" stroke="#3E9B54" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="134" cy="10" rx="7" ry="4" fill="#5CC46F" transform="rotate(-20 134 10)"/>`:`<circle cx="128" cy="22" r="11" fill="#FFA62B"/><circle cx="125" cy="19" r="3" fill="#FFD08A"/>
+  <path d="M128 11 q6 -7 12 -3 q-6 5 -12 3z" fill="#4CAF50"/>`}
   </svg>`;
 }
+/* 정면 카피바라 (멀리서 다가오는 효과용) */
+function capyFrontSVG(){
+  return `<svg viewBox="0 0 140 150" aria-hidden="true">
+  <ellipse cx="70" cy="142" rx="44" ry="6" fill="#1E2B37" opacity=".12"/>
+  <g class="leg a"><rect x="40" y="112" width="18" height="28" rx="9" fill="#7A4E28"/></g>
+  <g class="leg b"><rect x="82" y="112" width="18" height="28" rx="9" fill="#7A4E28"/></g>
+  <ellipse cx="70" cy="100" rx="48" ry="36" fill="#A8743F"/>
+  <ellipse cx="70" cy="108" rx="30" ry="22" fill="#B98552"/>
+  <ellipse cx="34" cy="34" rx="9" ry="8" fill="#7A4E28"/><ellipse cx="106" cy="34" rx="9" ry="8" fill="#7A4E28"/>
+  <rect x="26" y="30" width="88" height="66" rx="32" fill="#A8743F"/>
+  <path d="M44 54 q7 -7 14 0" stroke="#2A1A0C" stroke-width="3.6" fill="none" stroke-linecap="round"/>
+  <path d="M82 54 q7 -7 14 0" stroke="#2A1A0C" stroke-width="3.6" fill="none" stroke-linecap="round"/>
+  <circle cx="40" cy="70" r="7" fill="#FF8FA3" opacity=".55"/><circle cx="100" cy="70" r="7" fill="#FF8FA3" opacity=".55"/>
+  <rect x="48" y="60" width="44" height="32" rx="15" fill="#8A5C30"/>
+  <ellipse cx="61" cy="70" rx="3" ry="2.4" fill="#3B2412"/><ellipse cx="79" cy="70" rx="3" ry="2.4" fill="#3B2412"/>
+  <path d="M62 82 q8 6 16 0" stroke="#3B2412" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="70" cy="22" r="13" fill="#FFA62B"/><circle cx="66" cy="18" r="3.5" fill="#FFD08A"/>
+  <path d="M70 10 q7 -8 14 -3 q-7 6 -14 3z" fill="#4CAF50"/>
+  </svg>`;
+}
+const BABY_LINES=['나도!','기다려~','같이 가!','헤헤','영차영차'];
 let capyLast=0;
-function capyRun(n=1){
-  if(RM)return;
-  const now=Date.now();if(now-capyLast<500)return;capyLast=now;
-  const dir=Math.random()<.5?'right':'left',jumpy=Math.random()<.3,baseY=12+Math.random()*38,dur=1.5+Math.random()*.4;
+/* 옆으로 달려 지나가기: n마리가 같은 방향·같은 높이로 줄지어 (앞은 엄마·아빠, 뒤로 갈수록 아기) */
+function capyParade(n){
+  const dir=Math.random()<.5?'right':'left',jumpy=Math.random()<.25,baseY=14+Math.random()*34,dur=(1.5+Math.random()*.4)*1.25;
+  const sizes=[150,140,112,100,90,82,76,70];
   for(let i=0;i<n;i++){
     setTimeout(()=>{
-      const c=document.createElement('div');
+      const c=document.createElement('div'),w=sizes[Math.min(i,sizes.length-1)];
       c.className=`capy ${dir}${jumpy?' jumpy':''}`;
-      const w=i===0?150:120;
-      c.style.setProperty('--y',`calc(${baseY}vh + ${i*14}px)`);c.style.setProperty('--w',w+'px');
+      c.style.setProperty('--y',`calc(${baseY}vh + ${150-w}px * .6)`);c.style.setProperty('--w',w+'px');
       c.style.setProperty('--run',dir==='right'?'runR':'runL');c.style.setProperty('--dur',dur+'s');
-      c.innerHTML=`<div class="cb">${i===0?`<div class="cbub">${rnd(CAPY_PRAISE)}</div>`:''}<span class="dust">💨</span>${capySVG()}</div>`;
-      $('#fx').appendChild(c);sfx.whoosh();
+      const say=i===0?rnd(CAPY_PRAISE):(i===n-1&&n>=3?rnd(BABY_LINES):'');
+      c.innerHTML=`<div class="cb">${say?`<div class="cbub${i?' small':''}">${say}</div>`:''}<span class="dust">💨</span>${capySVG(i>=2)}</div>`;
+      $('#fx').appendChild(c);if(i<3)sfx.whoosh();
       setTimeout(()=>c.remove(),dur*1000+100);
-    },i*230);
+    },i*300);
   }
 }
-
+/* 멀리서 화면 가운데로 점점 커지며 다가오기 */
+function capyApproach(){
+  const c=document.createElement('div');c.className='capy approach';
+  c.style.setProperty('--x',(40+Math.random()*20)+'vw');
+  c.innerHTML=`<div class="cb"><div class="cbub">${rnd(CAPY_PRAISE)}</div>${capyFrontSVG()}</div>`;
+  $('#fx').appendChild(c);
+  tone(392,.0,.12);tone(523,.25,.12);tone(659,.5,.12);tone(784,.75,.12);tone(1047,1.0,.25);
+  setTimeout(()=>{const r=c.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,['⭐','✨','🧡'],12,160);sfx.whoosh()},2050);
+  setTimeout(()=>c.remove(),2400);
+}
+/* combo = 연속 정답 수 → 3콤보부터 가족이 한 마리씩 늘어남(최대 8마리). 그 전에는 랜덤으로 달려가기 또는 다가오기 */
+function capyRun(combo=1,force){
+  if(RM)return;
+  const now=Date.now();if(now-capyLast<500)return;capyLast=now;
+  if(force==='parade')return capyParade(combo);
+  if(combo>=3)return capyParade(Math.min(combo,8));
+  if(Math.random()<.4)capyApproach();else capyParade(1);
+}
 /* ================= 배경음악 =================
    음원 파일 없이 Web Audio로 직접 연주하는 경쾌한 칩튠 (C장조, 132BPM, 8마디 반복)
    - 멜로디(사각파) + 통통 튀는 베이스 + 엇박 코드 + 킥·스네어·하이햇
@@ -1134,7 +1179,7 @@ function answer(ok,s){
   const h=$('#lhost'),zone=$('#q .slots')||$('#q .kopts')||$('#q .pairs')||$('#q'),[zx,zy]=ctr(zone);
   if(ok){L.correct++;if(!isPairs){L.combo++;L.best=Math.max(L.best,L.combo);sfx.ok();if(L.combo>=3&&L.combo%3===0){const cb=L.combo;setTimeout(()=>sfx.combo(cb),250)}}
     burst(zx,zy,['⭐','✨','🌟'],14,130);floatText(zx,zy-40,L.combo>=3?`+${10+L.combo*2}`:'+10');
-    {const nc=isPairs?3:L.combo>=5?3:L.combo>=3?2:1;setTimeout(()=>capyRun(nc),200)}
+    {const cb=L.combo;setTimeout(()=>isPairs?capyRun(3,'parade'):capyRun(cb),200)}
     if(L.combo>=3){act(h,'dance',1800);emote(h,'🔥');if(L.combo%5===0)confetti()}else{act(h,'happy');emote(h,rnd(['⭐','❤️','😆','👍','🎉']))}}
   else{L.mistakes++;L.combo=0;sfx.no();act(h,'sweat',1800);emote(h,rnd(['💦','😅','🤔']));if(!s.retry)L.queue.push({...s,retry:true})}
   save();bar();comboUI();
