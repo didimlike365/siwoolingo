@@ -232,6 +232,36 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 .legend{display:flex;gap:12px;font-size:13px;color:var(--soft);flex-wrap:wrap}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:4px;border:2px solid;vertical-align:-2px;margin-right:3px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));width:min(92%,480px);background:var(--ink);color:#fff;border-radius:16px;padding:12px 16px;font-size:15px;line-height:1.45;z-index:50;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+/* 알파벳 */
+.abcic{font-family:var(--word);font-weight:700;font-size:34px;color:var(--ink)}
+.abctab{background:#FFF4D6;box-shadow:0 4px 0 #F2C94C}
+.abcw{font-family:var(--word);font-weight:700;font-size:24px}
+.wp .w.abcw{font-size:28px}
+.wprev.abcall{grid-template-columns:repeat(auto-fill,minmax(52px,1fr))}
+.wprev.abcall .w{font-size:20px}
+.abcBig{display:flex;gap:18px;justify-content:center;align-items:flex-end}
+.abcBig span{font-family:var(--word);font-weight:700;line-height:1;padding:8px 18px 14px;border-radius:22px;background:var(--card);border:4px solid var(--line);border-bottom-width:9px;cursor:pointer;transition:transform .15s,background .15s}
+.abcBig .up{font-size:clamp(84px,22vw,130px);color:var(--sky-d)}
+.abcBig .lo{font-size:clamp(70px,18vw,110px);color:var(--vow)}
+.abcBig.one span{cursor:pointer}
+.abcBig span.on,.abcEx.on{background:var(--hint);border-color:var(--star);transform:translateY(-6px) scale(1.05)}
+.abcEx{display:flex;align-items:center;gap:12px;background:var(--card);border:3px solid var(--line);border-radius:18px;padding:8px 16px;cursor:pointer;transition:transform .15s,background .15s}
+.abcEx .kor{display:block;font-size:16px}
+.exw{font-family:var(--word);font-weight:700;font-size:34px}
+.exw.big{font-size:52px;display:flex;align-items:center}
+.exw .exl{color:var(--vow);font-size:1.25em}
+.lopts .lopt{font-family:var(--word);font-weight:700;font-size:54px;padding:10px 8px}
+.blank{display:inline-grid;place-items:center;min-width:56px;height:66px;border:3px dashed var(--soft);border-radius:12px;color:var(--soft);font-size:40px;margin:0 3px;font-family:var(--word);font-weight:700}
+.blank.fill{border-style:solid;border-color:var(--ok);color:var(--ok-d);background:var(--ok-bg)}
+.blank.fill.no{border-color:var(--no);color:var(--no-d);background:var(--no-bg)}
+.seq{display:flex;gap:10px;align-items:center}
+.seq .sq,.seq .blank{width:72px;height:84px;font-size:50px}
+.seq .sq{display:grid;place-items:center;font-family:var(--word);font-weight:700;background:var(--card);border:3px solid var(--line);border-radius:14px}
+.pairs.abcp{grid-template-columns:1fr 1fr;max-width:420px}
+.pairs.abcp .pb{font-family:var(--word);font-weight:700;font-size:34px;height:64px}
+.pairs.abcp .pb.up{color:var(--sky-d)}
+.pairs.abcp .pb.lo{color:var(--vow)}
+@media (max-width:420px){.tabs .tab{font-size:15px;padding:8px 4px}.seq .sq,.seq .blank{width:58px;height:70px;font-size:40px}}
 @media (max-width:420px){.grid{grid-template-columns:repeat(2,1fr)}.cat .ic{width:64px;height:64px;font-size:36px}.tile{width:52px;height:60px;font-size:34px}}
 /* ---------- 캐릭터 추가 표정·동작 ---------- */
 .critter .closed,.critter .drop,.critter .x-eyes{display:none}
@@ -451,10 +481,19 @@ const CATS=[
   [['book','📖','책'],['door','🚪','문'],['shoe','👟','신발'],['chair','🪑','의자'],['clock','⏰','시계'],['phone','📱','전화기']],
   [['pencil','✏️','연필'],['window','🪟','창문'],['umbrella','☂️','우산'],['scissors','✂️','가위'],['computer','💻','컴퓨터'],['toothbrush','🪥','칫솔']]]}
 ];
-const LEVELS=[{n:'레벨 1',d:'쉬움 · 짧은 단어'},{n:'레벨 2',d:'보통 · 조금 긴 단어'},{n:'레벨 3',d:'어려움 · 자판으로 쓰기'}];
+const LEVELS={0:{n:'알파벳',d:'대문자 · 소문자 Aa~Zz'},1:{n:'레벨 1',d:'쉬움 · 짧은 단어'},2:{n:'레벨 2',d:'보통 · 조금 긴 단어'},3:{n:'레벨 3',d:'어려움 · 자판으로 쓰기'}};
 const STEPS=[{n:'듣고 쓰기',i:'🎧',d:'소리를 듣고 글자를 맞춰요'},{n:'뜻 보고 쓰기',i:'📝',d:'한글 뜻을 보고 영어로 써요'},{n:'짝맞추기',i:'🔗',d:'소리와 뜻을 짝지어요'}];
 const ALLW=[];
 CATS.forEach((c,ci)=>c.lv.forEach((ws,li)=>{c.lv[li]=ws.map(([w,e,k])=>{const o={w,e,k,ci,lv:li+1,id:`${li+1}:${w}`};ALLW.push(o);return o})}));
+/* 알파벳 레벨: 글자마다 예시 단어 (x는 첫 글자로 쓰는 쉬운 단어가 없어 끝 글자 단어 box) */
+const ABC_EX={a:['apple','🍎','사과'],b:['bear','🐻','곰'],c:['cat','🐱','고양이'],d:['dog','🐶','강아지'],e:['egg','🥚','달걀'],f:['fish','🐟','물고기'],g:['grape','🍇','포도'],h:['hat','🧢','모자'],i:['ice','🧊','얼음'],j:['juice','🧃','주스'],k:['kite','🪁','연'],l:['lion','🦁','사자'],m:['moon','🌙','달'],n:['nose','👃','코'],o:['octopus','🐙','문어'],p:['pig','🐷','돼지'],q:['queen','👸','여왕'],r:['rabbit','🐰','토끼'],s:['sun','☀️','해'],t:['tiger','🐯','호랑이'],u:['umbrella','☂️','우산'],v:['violin','🎻','바이올린'],w:['whale','🐳','고래'],x:['box','📦','상자'],y:['yo-yo','🪀','요요'],z:['zebra','🦓','얼룩말']};
+const ABCW=[...'abcdefghijklmnopqrstuvwxyz'].map((l,i)=>{const [w,e,k]=ABC_EX[l];return {id:'0:'+l,l,U:l.toUpperCase(),w,e,k,abc:true,i,ex:l==='x'?w.length-1:0}});
+const ABCG=[['abcd','momo'],['efgh','ssak'],['ijkl','mungchi'],['mnop','pipi'],['qrst','toto'],['uvw','momo'],['xyz','ssak']].map(([ls,host])=>({id:'abc-'+ls,host,letters:[...ls].map(l=>ABCW.find(x=>x.l===l)),name:`${ls[0].toUpperCase()} ~ ${ls.at(-1).toUpperCase()}`,icon:`<span class="abcic">${ls[0].toUpperCase()}${ls[0]}</span>`,emo:ABC_EX[ls[0]][1]}));
+ABCG.push({id:'abc-all',host:'toto',letters:ABCW,name:'A~Z 총정리',icon:'🔤',emo:'🔤',all:true});
+// 헷갈리기 쉬운 글자 (보기에 섞어서 구별 연습)
+const CONF={b:'dpq',d:'bpq',p:'qbd',q:'pbd',m:'nw',n:'muh',u:'nv',v:'uwy',w:'vm',i:'lj',l:'it',j:'ig',c:'oe',e:'ca',a:'oe',o:'ac',g:'qj',h:'nk',f:'t',t:'fl',r:'n',s:'z',z:'s',x:'k',y:'v',k:'x'};
+const ABC_STEPS=[{n:'글자 만나기',i:'👀',d:'대문자·소문자와 예시 단어를 배워요'},{n:'대문자·소문자',i:'🔠',d:'짝꿍 글자를 찾아요'},{n:'첫 글자 찾기',i:'🔍',d:'그림을 보고 첫 글자를 골라요'}];
+const ABC_STEPS_ALL=[{n:'ABC 순서',i:'🔤',d:'빈자리에 들어갈 글자를 찾아요'},{n:'대소문자 총정리',i:'🔠',d:'26글자 짝꿍 찾기'},{n:'첫 글자 총정리',i:'🔍',d:'그림 보고 첫 글자 찾기'}];
 const VOW='aeiou';
 // 글자 이름: 음성 엔진은 대문자 한 글자를 알파벳 이름으로 가장 정확하게 읽음 (a만 관사로 읽히지 않게 따로)
 const NAME=Object.fromEntries([...'abcdefghijklmnopqrstuvwxyz'].map(c=>[c,c==='a'?'A.':c.toUpperCase()]));
@@ -465,14 +504,19 @@ const OOPS=['괜찮아, 다시 해 보자','아깝다! 정답은 이거야','천
 
 /* ================= 저장 ================= */
 const KEY='siwoolingo-v2';
-let S={stars:0,streak:0,lastDay:'',goalDay:'',goalCount:0,lv:1,view:1,p:{},w:{},ko:true,music:true};
+let S={stars:0,streak:0,lastDay:'',goalDay:'',goalCount:0,lv:1,view:0,p:{},w:{},ko:true,music:true};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+if(!S.abcSeen){S.view=0;S.abcSeen=true}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 const pad=n=>String(n).padStart(2,'0');
 function dayStr(off=0){const d=new Date(Date.now()+off*864e5);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
-const prog=(lv,ci)=>S.p[`${lv}:${CATS[ci].id}`]||[0,0,0];
+const unitsOf=lv=>lv===0?ABCG:CATS;
+const unitWords=(lv,ci)=>lv===0?ABCG[ci].letters:CATS[ci].lv[lv-1];
+const stepsOf=(lv,ci)=>lv===0?(ABCG[ci].all?ABC_STEPS_ALL:ABC_STEPS):STEPS;
+const byId=id=>ALLW.find(x=>x.id===id)||ABCW.find(x=>x.id===id);
+const prog=(lv,ci)=>S.p[`${lv}:${unitsOf(lv)[ci].id}`]||[0,0,0];
 const catClear=(lv,ci)=>prog(lv,ci).every(x=>x>0);
-const lvClearCount=lv=>CATS.filter((c,ci)=>catClear(lv,ci)).length;
+const lvClearCount=lv=>unitsOf(lv).filter((c,ci)=>catClear(lv,ci)).length;
 const mastered=w=>(S.w[w.id]?.ok||0)>=3;
 
 /* ================= 유틸 ================= */
@@ -703,7 +747,7 @@ function show(id){['home','lesson','result'].forEach(s=>$('#'+s).hidden=s!==id);
 function bubble(t){const b=$('#bubble');b.textContent=t;b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')}
 
 /* ================= 홈 ================= */
-function nextCat(lv){return CATS.findIndex((c,ci)=>!catClear(lv,ci))}
+function nextCat(lv){return unitsOf(lv).findIndex((c,ci)=>!catClear(lv,ci))}
 function renderHome(){
   const t=dayStr();if(S.goalDay!==t){S.goalDay=t;S.goalCount=0}
   if(S.lastDay&&S.lastDay!==t&&S.lastDay!==dayStr(-1))S.streak=0;
@@ -713,19 +757,19 @@ function renderHome(){
   $('#koBtn').textContent=S.ko?'안내 소리 켬':'안내 소리 끔';
   $('#musicBtn').textContent=S.music?'🎵 음악 켬':'🎵 음악 끔';
   const g=S.goalCount,lv=S.view,nc=nextCat(lv);
-  const host=nc>=0?CATS[nc].host:'momo';setHost($('#ghost'),host);
+  const U=unitsOf(lv),host=nc>=0?U[nc].host:'momo';setHost($('#ghost'),host);
   $('#gDots').innerHTML=Array.from({length:GOAL},(_,k)=>`<i class="${k<g?'on':''}"></i>`).join('');
   $('#gTitle').textContent=g>=GOAL?'오늘 목표 달성!':`오늘의 목표: ${GOAL}칸`;
-  $('#gSub').textContent=g>=GOAL?'내일 또 만나. 더 해도 좋아!':(nc>=0?`${CATS[nc].icon} ${CATS[nc].name} 해 볼까? · ${GOAL-g}칸 남음`:`${GOAL-g}칸 남음`);
-  $('#tabs').innerHTML=LEVELS.map((L,i)=>`<button class="tab${S.view===i+1?' on':''}" data-lv="${i+1}" ${i+1>S.lv?'disabled':''}>${i+1>S.lv?'🔒 ':''}${L.n}<small>${L.d}</small></button>`).join('');
+  $('#gSub').textContent=g>=GOAL?'내일 또 만나. 더 해도 좋아!':(nc>=0?`${U[nc].emo||U[nc].icon} ${U[nc].name} 해 볼까? · ${GOAL-g}칸 남음`:`${GOAL-g}칸 남음`);
+  $('#tabs').innerHTML=[0,1,2,3].map(i=>`<button class="tab${S.view===i?' on':''}${i===0?' abctab':''}" data-lv="${i}" ${i>S.lv?'disabled':''}>${i>S.lv?'🔒 ':''}${LEVELS[i].n}<small>${LEVELS[i].d}</small></button>`).join('');
   const cc=lvClearCount(lv);
-  $('#lvTxt').textContent=`클리어 ${cc}/10`;$('#lvBar').style.width=cc*10+'%';
-  $('#grid').innerHTML=CATS.map((c,ci)=>{const h=HOSTS[c.host],p=prog(lv,ci),cl=catClear(lv,ci);
+  $('#lvTxt').textContent=`클리어 ${cc}/${U.length}`;$('#lvBar').style.width=cc/U.length*100+'%';
+  $('#grid').innerHTML=U.map((c,ci)=>{const h=HOSTS[c.host],p=prog(lv,ci),cl=catClear(lv,ci);
     return `<button class="cat${cl?' clear':''}${ci===nc?' next':''}" data-ci="${ci}" style="--hc:${h.belly};--hd:${h.dark}"><span class="ic">${c.icon}</span><span class="cn">${c.name}</span><span class="cs">${p.map(x=>STAR.replace('<svg',`<svg class="${x?'f':''}"`)).join('')}</span></button>`}).join('');
   show('home');
 }
 $('#tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b&&!b.disabled){S.view=+b.dataset.lv;save();sfx.tap();renderHome()}});
-$('#grid').addEventListener('click',e=>{const b=e.target.closest('.cat');if(b){sfx.tap();b.classList.remove('wig');void b.offsetWidth;b.classList.add('wig');const [x,y]=ctr(b);burst(x,y,[CATS[+b.dataset.ci].icon,'✨'],8,110);setTimeout(()=>openCat(+b.dataset.ci),260)}});
+$('#grid').addEventListener('click',e=>{const b=e.target.closest('.cat');if(b){sfx.tap();b.classList.remove('wig');void b.offsetWidth;b.classList.add('wig');const [x,y]=ctr(b);burst(x,y,[unitsOf(S.view)[+b.dataset.ci].emo||CATS[+b.dataset.ci].icon,'✨'],8,110);setTimeout(()=>openCat(+b.dataset.ci),260)}});
 $('#koBtn').onclick=()=>{S.ko=!S.ko;save();renderHome()};
 $('#musicBtn').onclick=()=>{S.music=!S.music;save();renderHome();if(S.music)Music.on();else Music.off(.4)};
 async function soundCheck(auto){
@@ -775,26 +819,52 @@ setInterval(()=>{
 /* ================= 카테고리 시트 ================= */
 let openCi=-1;
 function openCat(ci){
-  openCi=ci;const lv=S.view,c=CATS[ci],h=HOSTS[c.host],p=prog(lv,ci),ws=c.lv[lv-1];
-  const nextStep=p.findIndex(x=>!x);
-  $('#catPanel').innerHTML=`<div class="ph"><h2>${c.icon} ${c.name} · ${LEVELS[lv-1].n}</h2><button class="link" id="catX">닫기</button></div>
-  <div class="catHead"><div class="critter" data-host="${c.host}">${charSVG(h)}</div><div class="say">${c.name} 단어 6개를 배워 보자! 나는 ${h.name}야.</div></div>
-  <div class="wprev">${ws.map(w=>`<button class="wp${mastered(w)?' got':''}" data-w="${w.id}"><span class="e">${pic(w.e)}</span><span class="w">${w.w}</span><span class="k">${w.k}</span></button>`).join('')}</div>
-  <div class="steps">${STEPS.map((s,i)=>{const lock=i>0&&!p[i-1];return `<button class="step${i===nextStep?' go':''}" data-st="${i}" style="--hc:${h.belly}" ${lock?'disabled':''}><span class="si">${lock?'🔒':s.i}</span><span><div class="st">${i+1}. ${s.n}</div><div class="sd">${s.d}</div></span><span class="ss">${p[i]?stars3(p[i]):''}</span></button>`}).join('')}</div>`;
+  openCi=ci;const lv=S.view,c=unitsOf(lv)[ci],h=HOSTS[c.host],p=prog(lv,ci),ws=unitWords(lv,ci);
+  const nextStep=p.findIndex(x=>!x),abc=lv===0;
+  const intro=abc?(c.all?`A부터 Z까지 26글자 총정리! 나는 ${h.name}야.`:`${c.name} 글자를 배워 보자! 나는 ${h.name}야.`):`${c.name} 단어 6개를 배워 보자! 나는 ${h.name}야.`;
+  const prev=abc?(c.all?`<div class="wprev abcall">${ws.map(w=>`<button class="wp" data-w="${w.id}"><span class="w">${w.U}${w.l}</span></button>`).join('')}</div>`
+      :`<div class="wprev">${ws.map(w=>`<button class="wp" data-w="${w.id}"><span class="w abcw">${w.U} ${w.l}</span><span class="e">${w.e}</span><span class="k">${w.w}</span></button>`).join('')}</div>`)
+    :`<div class="wprev">${ws.map(w=>`<button class="wp${mastered(w)?' got':''}" data-w="${w.id}"><span class="e">${pic(w.e)}</span><span class="w">${w.w}</span><span class="k">${w.k}</span></button>`).join('')}</div>`;
+  $('#catPanel').innerHTML=`<div class="ph"><h2>${c.emo&&abc?'':c.icon+' '}${c.name} · ${LEVELS[lv].n}</h2><button class="link" id="catX">닫기</button></div>
+  <div class="catHead"><div class="critter" data-host="${c.host}">${charSVG(h)}</div><div class="say">${intro}</div></div>
+  ${prev}
+  <div class="steps">${stepsOf(lv,ci).map((s,i)=>{const lock=i>0&&!p[i-1];return `<button class="step${i===nextStep?' go':''}" data-st="${i}" style="--hc:${h.belly}" ${lock?'disabled':''}><span class="si">${lock?'🔒':s.i}</span><span><div class="st">${i+1}. ${s.n}</div><div class="sd">${s.d}</div></span><span class="ss">${p[i]?stars3(p[i]):''}</span></button>`}).join('')}</div>`;
   $('#catSheet').hidden=false;
   prefetch(ws);
-  setTimeout(()=>say([[`${c.name} 단어를 배워 보자!`,'ko']],$('#catPanel .critter')),150);
+  setTimeout(()=>say([[abc?(c.all?'에이부터 지까지 총정리하자!':'새 글자를 배워 보자!'):`${c.name} 단어를 배워 보자!`,'ko']],$('#catPanel .critter')),150);
 }
 $('#catSheet').addEventListener('click',e=>{
   if(e.target.id==='catSheet'||e.target.id==='catX'){$('#catSheet').hidden=true;return}
-  const wp=e.target.closest('.wp');if(wp){const w=ALLW.find(x=>x.id===wp.dataset.w);sayWord(w,$('#catPanel .critter'));return}
+  const wp=e.target.closest('.wp');if(wp){const w=byId(wp.dataset.w);if(w.abc)say([[NAME[w.l],'ph'],[w.w,'en']],$('#catPanel .critter'));else sayWord(w,$('#catPanel .critter'));return}
   const st=e.target.closest('.step');if(st&&!st.disabled){sfx.tap();$('#catSheet').hidden=true;startLesson(S.view,openCi,+st.dataset.st)}
 });
 
 /* ================= 레슨 구성 ================= */
 const st=(t,w,x={})=>({t,w,...x});
 function reviewWords(lv,ci){return shuffle(ALLW.filter(w=>w.ci!==ci&&w.lv<=lv&&S.w[w.id]&&S.w[w.id].wrong>0&&(S.w[w.id].ok||0)<3))}
+function weakLetters(ci){return shuffle(ABCW.filter(w=>!ABCG[ci].letters.includes(w)&&S.w[w.id]&&S.w[w.id].wrong>0&&(S.w[w.id].ok||0)<3))}
+const rcase=()=>Math.random()<.5?'U':'l';
+function buildAbc(ci,step){
+  const G=ABCG[ci],W=G.letters;let q=[];
+  if(G.all){
+    if(step===0)q=shuffle(W).slice(0,10).map(w=>st('aOrder',w,{cs:rcase()}));
+    else if(step===1){const r=shuffle(W);q=[st('aPairs',null,{ws:r.slice(0,6)}),...r.slice(6,14).map((w,i)=>st('aCase',w,{dir:i%2?'U2l':'l2U'})),st('aPairs',null,{ws:r.slice(14,20)})]}
+    else q=shuffle(W.filter(w=>w.l!=='x')).slice(0,10).map(w=>st('aFirst',w));
+    return q;
+  }
+  if(step===0){
+    W.forEach(w=>{q.push(st('aIntro',w));q.push(st('aHear',w,{cs:rcase()}))});
+    shuffle(W).slice(0,2).forEach(w=>q.push(st('aHear',w,{cs:rcase()})));
+  }else if(step===1){
+    q=[st('aPairs',null,{ws:W}),...shuffle(W).map(w=>st('aCase',w,{dir:'U2l'})),...shuffle(W).map(w=>st('aCase',w,{dir:'l2U'}))];
+  }else{
+    q=[...shuffle(W).map(w=>st('aFirst',w)),...shuffle(W).slice(0,2).map(w=>st('aHear',w,{cs:rcase()})),st('aPairs',null,{ws:W})];
+  }
+  weakLetters(ci).slice(0,2).forEach(w=>q.splice(2+Math.floor(Math.random()*(q.length-2)),0,st('aCase',w,{dir:Math.random()<.5?'U2l':'l2U'})));
+  return q;
+}
 function buildLesson(lv,ci,step){
+  if(lv===0)return buildAbc(ci,step);
   const W=CATS[ci].lv[lv-1];let q=[];
   if(step===0){
     W.forEach(w=>{q.push(st('intro',w));q.push(st('lw',w))});
@@ -809,6 +879,22 @@ function buildLesson(lv,ci,step){
   }
   return q;
 }
+/* 알파벳 보기 4개: 정답 + 헷갈리는 글자 + 같은 묶음 글자 */
+function letterOpts(w){
+  const pool=[...(CONF[w.l]||'')];
+  const grp=ABCG.find(g=>!g.all&&g.letters.includes(w));if(grp)grp.letters.forEach(x=>pool.push(x.l));
+  const out=[];for(const c of shuffle(pool))if(c!==w.l&&!out.includes(c)&&out.length<3)out.push(c);
+  for(const c of shuffle([...'abcdefghijklmnopqrstuvwxyz']))if(out.length<3&&c!==w.l&&!out.includes(c))out.push(c);
+  return shuffle([w.l,...out]);
+}
+function lettersHTML(w,cs){return `<div class="kopts lopts">${letterOpts(w).map(c=>{const t=cs==='U'?c.toUpperCase():c;return `<button class="kopt lopt" data-id="${t}">${t}</button>`}).join('')}</div>`}
+function hookLetters(q,s,ans,onPick){
+  q.querySelectorAll('.lopt').forEach(b=>b.onclick=()=>{
+    if(L.lock)return;const ok=b.dataset.id===ans;b.classList.add(ok?'ok':'no');
+    if(!ok)q.querySelectorAll('.lopt').forEach(c=>{if(c.dataset.id===ans)c.classList.add('ok');else if(c!==b)c.classList.add('dim')});
+    onPick&&onPick(b.dataset.id);answer(ok,s);
+  });
+}
 function opts4(w){const pool=CATS[w.ci].lv[w.lv-1].filter(x=>x.id!==w.id&&x.k!==w.k);return shuffle([w,...shuffle(pool).slice(0,3)])}
 function rec(w,ok){const r=S.w[w.id]||(S.w[w.id]={ok:0,wrong:0});if(ok)r.ok++;else{r.ok=Math.max(0,r.ok-1);r.wrong++}}
 
@@ -816,10 +902,10 @@ function rec(w,ok){const r=S.w[w.id]||(S.w[w.id]={ok:0,wrong:0});if(ok)r.ok++;el
 let L=null,keyH=null;
 function startLesson(lv,ci,step){
   actx();
-  const W=CATS[ci].lv[lv-1];
+  const W=unitWords(lv,ci);
   L={lv,ci,step,queue:buildLesson(lv,ci,step),pos:0,correct:0,mistakes:0,combo:0,best:0,lock:false,W};
   L.total=L.queue.length;
-  const hk=CATS[ci].host;setHost($('#lhost'),hk);setHost($('#qhost'),hk);
+  const hk=unitsOf(lv)[ci].host;setHost($('#lhost'),hk);setHost($('#qhost'),hk);
   prefetch(W);
   show('lesson');renderStep();
 }
@@ -939,6 +1025,79 @@ const R={
       answer(ok,s);
     });
   },
+  // [알파벳] 새 글자: 큰 대문자·소문자 + 예시 단어 (첫 글자 강조)
+  aIntro(s,q){
+    const w=s.w;bubble('새 글자야! 대문자, 소문자');
+    const exw=[...w.w].map((c,i)=>i===w.ex?`<b class="exl">${c}</b>`:c).join('');
+    q.innerHTML=`<div class="abcBig"><span class="up" id="aU">${w.U}</span><span class="lo" id="aL">${w.l}</span></div>
+      <div class="abcEx" id="aE"><span class="pic sm">${w.e}</span><span><span class="exw">${exw}</span><span class="kor">${w.k}</span></span></div>
+      ${w.l==='x'?'<p class="hint">x는 단어 끝에 자주 나와요</p>':''}
+      <div class="row"><button class="btn sky" id="again">${SPK}다시 듣기</button><button class="btn" id="gotit">알겠어!</button></div>`;
+    const hl=id=>['aU','aL','aE'].forEach(k=>$('#'+k).classList.toggle('on',k===id));
+    const ln=NAME[w.l];
+    const play=first=>say([...(first?[['새 글자야!','ko']]:[]),['대문자','ko',{onstart:()=>hl('aU'),gap:60}],[ln,'ph',{onstart:()=>hl('aU'),gap:300}],['소문자','ko',{onstart:()=>hl('aL'),gap:60}],[ln,'ph',{onstart:()=>hl('aL'),gap:400}],[w.w,'en',{onstart:()=>hl('aE')}]]);
+    play(true);
+    $('#aU').onclick=()=>{hl('aU');say([[ln,'ph']])};$('#aL').onclick=()=>{hl('aL');say([[ln,'ph']])};$('#aE').onclick=()=>{hl('aE');sayWord(w)};
+    $('#again').onclick=()=>{sfx.tap();play(false)};
+    $('#gotit').onclick=()=>{sfx.tap();L.correct++;act($('#lhost'),'happy');emote($('#lhost'),'⭐');next()};
+  },
+  // [알파벳] 글자 이름 듣고 고르기 (기기 영어 음성이 없으면 첫 글자 찾기로 대체)
+  aHear(s,q){
+    if(!(ttsOK()&&V.en))return R.aFirst(s,q);
+    const w=s.w,cs=s.cs,ans=cs==='U'?w.U:w.l;s.ans=ans;bubble(cs==='U'?'듣고 대문자를 골라 봐':'듣고 소문자를 골라 봐');
+    q.innerHTML=`${spkBtn(false)}${lettersHTML(w,cs)}`;
+    const play=first=>say([...(first?[[cs==='U'?'어떤 대문자일까?':'어떤 소문자일까?','ko']]:[]),[NAME[w.l],'ph']]);play(true);$('#spk').onclick=()=>play(false);
+    hookLetters(q,s,ans);
+  },
+  // [알파벳] 대문자 → 소문자 / 소문자 → 대문자
+  aCase(s,q){
+    const w=s.w,u2l=s.dir==='U2l',ans=u2l?w.l:w.U;s.ans=ans;
+    bubble(u2l?`대문자 ${w.U}의 짝꿍 소문자는?`:`소문자 ${w.l}의 짝꿍 대문자는?`);
+    q.innerHTML=`<div class="abcBig one"><span class="${u2l?'up':'lo'}" id="shown">${u2l?w.U:w.l}</span></div>${lettersHTML(w,u2l?'l':'U')}`;
+    say([[u2l?'이 대문자의 소문자 짝꿍을 찾아 봐':'이 소문자의 대문자 짝꿍을 찾아 봐','ko']]);
+    $('#shown').onclick=()=>say([[NAME[w.l],'ph']]);
+    hookLetters(q,s,ans);
+  },
+  // [알파벳] 그림 보고 첫 글자 찾기 (x는 끝 글자)
+  aFirst(s,q){
+    const w=s.w,ans=w.l;s.ans=ans;const last=w.ex>0;
+    bubble(last?'끝 글자를 찾아 봐':'첫 글자를 찾아 봐');
+    const shown=[...w.w].map((c,i)=>i===w.ex?'<span class="blank" id="blank">?</span>':c).join('');
+    q.innerHTML=`<div class="row center"><div class="pic">${w.e}</div>${spkBtn(true)}</div><div class="exw big">${shown}</div><div class="kor">${w.k}</div>${lettersHTML(w,'l')}`;
+    const play=first=>say([...(first?[[last?'끝 글자는 뭘까?':'첫 글자는 뭘까?','ko']]:[]),[w.w,'en']]);play(true);$('#spk').onclick=()=>play(false);
+    hookLetters(q,s,ans,c=>{const b=$('#blank');b.textContent=c;b.classList.add('fill');if(c!==ans){b.classList.add('no');setTimeout(()=>{b.textContent=ans;b.classList.remove('no')},700)}});
+  },
+  // [알파벳] ABC 순서: 빈자리 글자 찾기
+  aOrder(s,q){
+    const w=s.w,cs=s.cs,i=w.i,st0=Math.max(0,Math.min(i-3,22)),seq=ABCW.slice(st0,st0+4),ans=cs==='U'?w.U:w.l;s.ans=ans;
+    bubble('빈자리에 들어갈 글자는?');
+    q.innerHTML=`<div class="seq">${seq.map(x=>x===w?'<span class="blank" id="blank">?</span>':`<span class="sq">${cs==='U'?x.U:x.l}</span>`).join('')}</div>${lettersHTML(w,cs)}`;
+    say([['순서대로 읽어 보고 빈자리를 채워 봐','ko']]);
+    hookLetters(q,s,ans,c=>{const b=$('#blank');b.textContent=c;b.classList.add('fill');if(c!==ans){b.classList.add('no');setTimeout(()=>{b.textContent=ans;b.classList.remove('no')},700)}});
+  },
+  // [알파벳] 대문자 ↔ 소문자 짝맞추기 판
+  aPairs(s,q){
+    const W=s.ws;bubble('대문자와 소문자 짝꿍을 찾아 줘');
+    say([['대문자와 소문자 짝꿍을 찾아 줘!','ko']]);
+    q.innerHTML=`<div class="pairs abcp"><div class="pcol">${shuffle(W).map(w=>`<button class="pb up" data-id="${w.id}">${w.U}</button>`).join('')}</div><div class="pcol">${shuffle(W).map(w=>`<button class="pb lo" data-id="${w.id}">${w.l}</button>`).join('')}</div></div>`;
+    let A=null,B=null,matched=0;const missed=new Set();
+    const clear=()=>{[A,B].forEach(b=>b&&b.classList.remove('sel'));A=B=null};
+    const check=()=>{
+      if(!A||!B)return;const a=A,b=B,w=W.find(x=>x.id===a.dataset.id);
+      if(a.dataset.id===b.dataset.id){
+        a.classList.add('ok');b.classList.add('ok');sfx.ok();{const [ax,ay]=ctr(a),[bx,by]=ctr(b);burst(ax,ay,['⭐','✨'],6,70);burst(bx,by,['⭐','✨'],6,70);floatText((ax+bx)/2,(ay+by)/2,'+10')}
+        setTimeout(()=>{a.classList.add('done');b.classList.add('done')},350);
+        if(!missed.has(w.id))rec(w,true);
+        L.combo++;L.best=Math.max(L.best,L.combo);comboUI();act($('#lhost'),'happy');emote($('#lhost'),rnd(['⭐','❤️','👍']));
+        clear();if(++matched===W.length){save();setTimeout(()=>answer(true,s),600)}
+      }else{
+        a.classList.add('no');b.classList.add('no');sfx.no();L.mistakes++;L.combo=0;comboUI();act($('#lhost'),'puzzle',900);emote($('#lhost'),'🤔');
+        missed.add(w.id);rec(w,false);setTimeout(()=>{a.classList.remove('no');b.classList.remove('no')},450);clear();
+      }
+    };
+    q.querySelectorAll('.pb.up').forEach(b=>b.onclick=()=>{if(L.lock||b.classList.contains('done'))return;const w=W.find(x=>x.id===b.dataset.id);say([[NAME[w.l],'ph']]);if(A)A.classList.remove('sel');A=b;b.classList.add('sel');check()});
+    q.querySelectorAll('.pb.lo').forEach(b=>b.onclick=()=>{if(L.lock||b.classList.contains('done'))return;sfx.tap();if(B)B.classList.remove('sel');B=b;b.classList.add('sel');check()});
+  },
   // 소리-뜻 짝맞추기 판
   pairs(s,q){
     const W=s.ws;bubble('소리를 누르고 맞는 뜻을 찾아 봐');
@@ -969,24 +1128,24 @@ const R={
 };
 function answer(ok,s){
   if(L.lock)return;L.lock=true;keyH=null;
-  const isPairs=s.t==='pairs',w=s.w;
+  const isPairs=s.t==='pairs'||s.t==='aPairs',w=s.w;
   if(!isPairs)rec(w,ok);
   clearTimeout(nudgeT);
   const h=$('#lhost'),zone=$('#q .slots')||$('#q .kopts')||$('#q .pairs')||$('#q'),[zx,zy]=ctr(zone);
-  if(ok){L.correct++;if(!isPairs){L.combo++;L.best=Math.max(L.best,L.combo);sfx.ok();if(L.combo>=3&&L.combo%3===0)setTimeout(()=>sfx.combo(L.combo),250)}
+  if(ok){L.correct++;if(!isPairs){L.combo++;L.best=Math.max(L.best,L.combo);sfx.ok();if(L.combo>=3&&L.combo%3===0){const cb=L.combo;setTimeout(()=>sfx.combo(cb),250)}}
     burst(zx,zy,['⭐','✨','🌟'],14,130);floatText(zx,zy-40,L.combo>=3?`+${10+L.combo*2}`:'+10');
-    setTimeout(()=>capyRun(isPairs?3:L.combo>=5?3:L.combo>=3?2:1),200);
+    {const nc=isPairs?3:L.combo>=5?3:L.combo>=3?2:1;setTimeout(()=>capyRun(nc),200)}
     if(L.combo>=3){act(h,'dance',1800);emote(h,'🔥');if(L.combo%5===0)confetti()}else{act(h,'happy');emote(h,rnd(['⭐','❤️','😆','👍','🎉']))}}
   else{L.mistakes++;L.combo=0;sfx.no();act(h,'sweat',1800);emote(h,rnd(['💦','😅','🤔']));if(!s.retry)L.queue.push({...s,retry:true})}
   save();bar();comboUI();
   const msg=ok?(L.combo>=3&&!isPairs?`${L.combo} 콤보! ${rnd(PRAISE)}`:rnd(PRAISE)):rnd(OOPS);bubble(msg);
   const sh=$('#sheet');sh.className='sheet '+(ok?'ok':'no');
   $('#shT').textContent=isPairs?'짝맞추기 성공!':(ok?msg:'괜찮아! 정답은…');
-  $('#shS').innerHTML=isPairs?`<span>6쌍을 모두 찾았어!</span>`:`<span class="se">${pic(w.e)}</span><b>${w.w}</b><span>${w.k}</span>`;
+  $('#shS').innerHTML=isPairs?`<span>${s.ws.length}쌍을 모두 찾았어!</span>`:w.abc?`<b class="abcw">${w.U} ${w.l}</b><span class="se">${w.e}</span><span>${w.w} · ${w.k}</span>`:`<span class="se">${pic(w.e)}</span><b>${w.w}</b><span>${w.k}</span>`;
   $('#shBtn').textContent=ok?'계속':'알겠어';
   sh.hidden=false;
   if(isPairs)say([['짝맞추기 성공!','ko']]);
-  else setTimeout(()=>say([[ok?'정답!':'정답은','ko'],[w.w,'en']]),250);
+  else setTimeout(()=>say([[ok?'정답!':'정답은','ko'],...(w.abc?[[NAME[w.l],'ph',{gap:250}]]:[]),[w.w,'en']]),250);
 }
 function next(){L.pos++;if(L.pos>=L.queue.length)finish();else renderStep()}
 $('#shBtn').onclick=()=>{sfx.tap();next()};
@@ -997,15 +1156,16 @@ $('#qLeave').onclick=()=>{$('#quitBox').hidden=true;synth&&synth.cancel();L=null
 /* ================= 결과 ================= */
 let pendingLvUp=0;
 function finish(){
-  const stars=L.mistakes===0?3:L.mistakes<=2?2:1,key=`${L.lv}:${CATS[L.ci].id}`;
+  const stars=L.mistakes===0?3:L.mistakes<=2?2:1,UN=unitsOf(L.lv),key=`${L.lv}:${UN[L.ci].id}`,STP=stepsOf(L.lv,L.ci);
   const p=(S.p[key]||[0,0,0]).slice();const wasClear=p.every(x=>x>0);
   p[L.step]=Math.max(p[L.step],stars);S.p[key]=p;S.stars+=stars;
   const t=dayStr();
   if(S.lastDay!==t){S.streak=S.lastDay===dayStr(-1)?S.streak+1:1;S.lastDay=t}
   if(S.goalDay!==t){S.goalDay=t;S.goalCount=0}
   S.goalCount++;
-  const nowClear=p.every(x=>x>0),c=CATS[L.ci];
-  if(nowClear&&lvClearCount(L.lv)===10&&S.lv===L.lv&&L.lv<3){S.lv++;S.view=S.lv;pendingLvUp=S.lv}
+  const nowClear=p.every(x=>x>0),c=UN[L.ci];
+  if(L.lv===0){if(nowClear&&lvClearCount(0)===UN.length&&!S.abcDone){S.abcDone=true;S.view=1;pendingLvUp='abc'}}
+  else if(nowClear&&lvClearCount(L.lv)===10&&S.lv===L.lv&&L.lv<3){S.lv++;S.view=S.lv;pendingLvUp=S.lv}
   else if(nowClear&&lvClearCount(L.lv)===10&&L.lv===3&&!S.allDone){S.allDone=true;pendingLvUp=4}
   save();
   const rh=$('#rhost');setHost(rh,c.host);
@@ -1015,17 +1175,17 @@ function finish(){
   const b=$('#rBadge');
   if(nowClear&&!wasClear){b.textContent=`🏅 ${c.name} 클리어!`;b.hidden=false}else b.hidden=true;
   const g=S.goalCount;
-  const nextTxt=L.step<2?`다음은 「${STEPS[L.step+1].n}」!`:'';
+  const nextTxt=L.step<2?`다음은 「${STP[L.step+1].n}」!`:'';
   $('#rMsg').textContent=(L.best>=3?`최고 ${L.best} 콤보! `:'')+(g===GOAL?`오늘 목표 달성! `:g<GOAL?`오늘 목표까지 ${GOAL-g}칸. `:'')+nextTxt;
-  $('#rWords').innerHTML=L.W.map(w=>`<button class="wchip" data-id="${w.id}">${pic(w.e)} ${w.w}</button>`).join('');
-  $('#rBtn').textContent=L.step<2?`${STEPS[L.step+1].n} 하기`:'카테고리 고르기';
+  $('#rWords').innerHTML=(L.lv===0&&c.all?[]:L.W).map(w=>`<button class="wchip" data-id="${w.id}">${w.abc?`<span class="abcw">${w.U}${w.l}</span> ${w.e}`:`${pic(w.e)} ${w.w}`}</button>`).join('');
+  $('#rBtn').textContent=L.step<2?`${STP[L.step+1].n} 하기`:(L.lv===0?'다음 글자 고르기':'카테고리 고르기');
   show('result');
   $('#rStars').querySelectorAll('svg').forEach((s,i)=>setTimeout(()=>{s.classList.add('in');if(i<stars)sfx.star(i)},400+i*380));
   setTimeout(()=>{act(rh,'dance',3500);emote(rh,stars===3?'🏆':'🎉')},300);
   sfx.win();confetti();
   setTimeout(()=>say([[title+(nowClear&&!wasClear?` ${c.name} 클리어!`:''),'ko']],rh),900);
 }
-$('#rWords').addEventListener('click',e=>{const b=e.target.closest('.wchip');if(b)sayWord(ALLW.find(x=>x.id===b.dataset.id),$('#rhost'))});
+$('#rWords').addEventListener('click',e=>{const b=e.target.closest('.wchip');if(!b)return;const w=byId(b.dataset.id);if(w.abc)say([[NAME[w.l],'ph'],[w.w,'en']],$('#rhost'));else sayWord(w,$('#rhost'))});
 $('#rBtn').onclick=()=>{
   sfx.tap();const l=L;L=null;
   if(pendingLvUp){showLvUp(pendingLvUp);pendingLvUp=0;renderHome();return}
@@ -1034,8 +1194,9 @@ $('#rBtn').onclick=()=>{
 };
 function showLvUp(n){
   setHost($('#uhost'),'momo');
-  if(n===4){$('#uTitle').textContent='모든 레벨 클리어!';$('#uMsg').textContent='단어 180개를 모두 배웠어! 이제 카테고리를 다시 돌며 별 3개를 모아 보자.'}
-  else{$('#uTitle').textContent=`${LEVELS[n-1].n} 열림!`;$('#uMsg').textContent=`카테고리 10개를 모두 깼어! 이제 ${LEVELS[n-1].d} 단어에 도전하자.`}
+  if(n==='abc'){$('#uTitle').textContent='알파벳 마스터!';$('#uMsg').textContent='A부터 Z까지 대문자, 소문자를 모두 익혔어! 이제 레벨 1에서 단어를 배워 보자.'}
+  else if(n===4){$('#uTitle').textContent='모든 레벨 클리어!';$('#uMsg').textContent='단어 180개를 모두 배웠어! 이제 카테고리를 다시 돌며 별 3개를 모아 보자.'}
+  else{$('#uTitle').textContent=`${LEVELS[n].n} 열림!`;$('#uMsg').textContent=`카테고리 10개를 모두 깼어! 이제 ${LEVELS[n].d} 단어에 도전하자.`}
   $('#lvup').hidden=false;sfx.fanfare();confetti();act($('#uhost'),'dance',4000);
   setTimeout(()=>say([[$('#uTitle').textContent,'ko']],$('#uhost')),500);
 }
@@ -1045,10 +1206,10 @@ function confetti(){const box=$('#confetti');box.innerHTML='';const cols=['#FF8A
 /* ================= 단어 가방 ================= */
 let bagLv=1;
 function renderBag(){
-  $('#bagTabs').innerHTML=LEVELS.map((l,i)=>`<button class="tab${bagLv===i+1?' on':''}" data-lv="${i+1}">${l.n}</button>`).join('');
+  $('#bagTabs').innerHTML=[1,2,3].map(i=>`<button class="tab${bagLv===i?' on':''}" data-lv="${i}">${LEVELS[i].n}</button>`).join('');
   $('#bagGrid').innerHTML=CATS.map(c=>`<div class="bagcat">${c.icon} ${c.name}</div><div class="wprev">${c.lv[bagLv-1].map(w=>{const r=S.w[w.id];return `<button class="wp bw${mastered(w)?' got':r?'':' no'}" data-w="${w.id}"><span class="e">${pic(w.e)}</span><span class="w">${w.w}</span><span class="k">${w.k}</span></button>`}).join('')}</div>`).join('');
 }
-$('#bagBtn').onclick=()=>{bagLv=S.view;renderBag();$('#bag').hidden=false};
+$('#bagBtn').onclick=()=>{bagLv=Math.max(1,S.view);renderBag();$('#bag').hidden=false};
 $('#bagTabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b){bagLv=+b.dataset.lv;renderBag()}});
 $('#bagGrid').addEventListener('click',e=>{const b=e.target.closest('.wp');if(b){actx();const w=ALLW.find(x=>x.id===b.dataset.w);if(ttsOK())sayWord(w);else fetchAudio(w.w).then(()=>sayWord(w))}});
 $('#bagX').onclick=()=>$('#bag').hidden=true;
