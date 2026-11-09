@@ -428,7 +428,7 @@ const ALLW=[];
 CATS.forEach((c,ci)=>c.lv.forEach((ws,li)=>{c.lv[li]=ws.map(([w,e,k])=>{const o={w,e,k,ci,lv:li+1,id:`${li+1}:${w}`};ALLW.push(o);return o})}));
 const VOW='aeiou';
 // 글자 이름: 음성 엔진은 대문자 한 글자를 알파벳 이름으로 가장 정확하게 읽음 (a만 관사로 읽히지 않게 따로)
-const NAME=Object.fromEntries([...'abcdefghijklmnopqrstuvwxyz'].map(c=>[c,c==='a'?'ay':c.toUpperCase()]));
+const NAME=Object.fromEntries([...'abcdefghijklmnopqrstuvwxyz'].map(c=>[c,c==='a'?'A.':c.toUpperCase()]));
 const EXTRA='abcdefghiklmnoprstuwy';
 const GOAL=3;
 const PRAISE=['우와, 맞았어!','최고야!','딩동댕!','잘 썼어!','멋지다!','정답이야!'];
