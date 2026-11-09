@@ -222,6 +222,8 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 .center .panel{border-radius:24px;max-width:380px;margin:0 16px;align-items:center;text-align:center}
 .center .critter{width:110px;height:110px}
 .center p{margin:0;font-size:18px}
+.center #shost{width:150px;height:150px}
+#startBox .btn{font-size:26px;padding:16px}
 .center h2{font-family:var(--display);font-weight:400;font-size:30px;margin:0;color:var(--ok-d)}
 .bagtabs{display:flex;gap:6px}
 .bagtabs .tab{font-size:15px;padding:6px}
@@ -281,6 +283,25 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 .peeker .critter{width:110px;height:110px}
 .peeker:not(.up) .say{display:none}
 .peeker .say{position:absolute;bottom:100%;right:30px;white-space:nowrap;font-size:16px}
+/* ---------- 칭찬 카피바라 ---------- */
+.capy{position:fixed;left:0;top:var(--y);width:var(--w,150px);pointer-events:none;z-index:46;will-change:transform;animation:var(--run) var(--dur,1.6s) cubic-bezier(.45,.05,.55,.95) forwards}
+.capy .cb{animation:capyHop .22s ease-in-out infinite alternate}
+.capy svg{display:block;width:100%;height:auto;overflow:visible}
+.capy.left svg{transform:scaleX(-1)}
+.capy .leg{transform-box:fill-box;transform-origin:50% 0;animation:legA .18s ease-in-out infinite alternate}
+.capy .leg.b{animation-name:legB}
+.capy .cbub{position:absolute;bottom:92%;left:50%;transform:translateX(-50%);background:#fff;border:3px solid #8A5C30;border-radius:16px;padding:4px 12px;font-family:var(--display);font-size:22px;color:#6B4423;white-space:nowrap;box-shadow:0 3px 0 rgba(0,0,0,.12);animation:pop .3s ease}
+.capy .dust{position:absolute;bottom:4px;font-size:26px;opacity:.8;animation:puff .35s ease-out infinite}
+.capy.right .dust{left:-30px}
+.capy.left .dust{right:-30px;transform:scaleX(-1)}
+.capy.jumpy .cb{animation:capyJump .5s ease-in-out infinite}
+@keyframes runR{from{transform:translateX(-220px)}to{transform:translateX(calc(100vw + 60px))}}
+@keyframes runL{from{transform:translateX(calc(100vw + 60px))}to{transform:translateX(-220px)}}
+@keyframes capyHop{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-8px) rotate(2deg)}}
+@keyframes capyJump{0%,100%{transform:translateY(0)}50%{transform:translateY(-46px) rotate(-6deg)}}
+@keyframes legA{from{transform:rotate(-28deg)}to{transform:rotate(28deg)}}
+@keyframes legB{from{transform:rotate(28deg)}to{transform:rotate(-28deg)}}
+@keyframes puff{from{transform:translateY(0) scale(.6);opacity:.9}to{transform:translateY(-10px) scale(1.2);opacity:0}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   #confetti{display:none}
@@ -363,6 +384,14 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
     <h2 id="uTitle">레벨 업!</h2>
     <p id="uMsg"></p>
     <button class="btn wide" id="uBtn">좋아!</button>
+  </div>
+</div>
+<div class="overlay center" id="startBox">
+  <div class="panel">
+    <div class="critter" id="shost"></div>
+    <h2>시우링고</h2>
+    <p>영어 단어 모험을 떠나 볼까?</p>
+    <button class="btn wide" id="startBtn">▶ 시작하기</button>
   </div>
 </div>
 <div id="confetti"></div>
@@ -501,7 +530,10 @@ const sfx={
   combo(n){[0,1,2].forEach(i=>tone(660+n*40+i*180,i*.07,.18))},
   star(i){tone(880+i*220,0,.22);tone(1320+i*220,.05,.2,'sine',.08)},
   win(){[523,659,784,1047].forEach((f,i)=>tone(f,i*.11,.3))},
-  fanfare(){[523,659,784,1047,784,1047,1319].forEach((f,i)=>tone(f,i*.13,.35))}
+  fanfare(){[523,659,784,1047,784,1047,1319].forEach((f,i)=>tone(f,i*.13,.35))},
+  whoosh(){const a=actx();if(!a)return;const len=a.sampleRate*.5,b=a.createBuffer(1,len,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+    const n=a.createBufferSource(),f=a.createBiquadFilter(),v=a.createGain(),t=a.currentTime;n.buffer=b;f.type='bandpass';f.Q.value=1.2;f.frequency.setValueAtTime(400,t);f.frequency.exponentialRampToValueAtTime(2600,t+.35);
+    v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(.22,t+.12);v.gain.exponentialRampToValueAtTime(.001,t+.45);n.connect(f).connect(v).connect(a.destination);n.start(t);n.stop(t+.5)}
 };
 
 /* ================= 음성 =================
@@ -571,6 +603,49 @@ function unlockAudio(){
 addEventListener('touchend',unlockAudio,{passive:true});
 addEventListener('pointerdown',unlockAudio);
 
+
+
+/* ================= 칭찬 카피바라 =================
+   정답을 맞히면 귤을 머리에 얹은 카피바라가 화면을 휙 가로질러 달려가며 칭찬. 콤보가 쌓이면 2~3마리가 줄지어 달림 */
+const CAPY_PRAISE=['최고야!','대단해!','천재다!','완벽해!','우와~!','잘했어!','Great!','Good job!','Awesome!'];
+function capySVG(){
+  return `<svg viewBox="0 0 170 120" aria-hidden="true">
+  <g class="leg a"><rect x="40" y="84" width="14" height="22" rx="7" fill="#7A4E28"/></g>
+  <g class="leg b"><rect x="60" y="86" width="14" height="20" rx="7" fill="#6B4423"/></g>
+  <g class="leg b"><rect x="100" y="84" width="14" height="22" rx="7" fill="#7A4E28"/></g>
+  <g class="leg a"><rect x="118" y="86" width="14" height="20" rx="7" fill="#6B4423"/></g>
+  <ellipse cx="82" cy="66" rx="60" ry="32" fill="#A8743F"/>
+  <ellipse cx="78" cy="76" rx="40" ry="16" fill="#B98552"/>
+  <path d="M26 58 q-8 -4 -6 6" stroke="#7A4E28" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <rect x="104" y="30" width="54" height="48" rx="22" fill="#A8743F"/>
+  <rect x="134" y="44" width="28" height="32" rx="13" fill="#8A5C30"/>
+  <ellipse cx="152" cy="52" rx="2.6" ry="2" fill="#3B2412"/>
+  <ellipse cx="114" cy="30" rx="7" ry="6" fill="#7A4E28"/>
+  <path d="M124 46 q5 -5 10 0" stroke="#2A1A0C" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+  <circle cx="128" cy="60" r="5" fill="#FF8FA3" opacity=".55"/>
+  <path d="M146 66 q5 4 10 0" stroke="#3B2412" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  <circle cx="128" cy="22" r="11" fill="#FFA62B"/><circle cx="125" cy="19" r="3" fill="#FFD08A"/>
+  <path d="M128 11 q6 -7 12 -3 q-6 5 -12 3z" fill="#4CAF50"/>
+  </svg>`;
+}
+let capyLast=0;
+function capyRun(n=1){
+  if(RM)return;
+  const now=Date.now();if(now-capyLast<500)return;capyLast=now;
+  const dir=Math.random()<.5?'right':'left',jumpy=Math.random()<.3,baseY=12+Math.random()*38,dur=1.5+Math.random()*.4;
+  for(let i=0;i<n;i++){
+    setTimeout(()=>{
+      const c=document.createElement('div');
+      c.className=`capy ${dir}${jumpy?' jumpy':''}`;
+      const w=i===0?150:120;
+      c.style.setProperty('--y',`calc(${baseY}vh + ${i*14}px)`);c.style.setProperty('--w',w+'px');
+      c.style.setProperty('--run',dir==='right'?'runR':'runL');c.style.setProperty('--dur',dur+'s');
+      c.innerHTML=`<div class="cb">${i===0?`<div class="cbub">${rnd(CAPY_PRAISE)}</div>`:''}<span class="dust">💨</span>${capySVG()}</div>`;
+      $('#fx').appendChild(c);sfx.whoosh();
+      setTimeout(()=>c.remove(),dur*1000+100);
+    },i*230);
+  }
+}
 
 /* ================= 배경음악 =================
    음원 파일 없이 Web Audio로 직접 연주하는 경쾌한 칩튠 (C장조, 132BPM, 8마디 반복)
@@ -653,7 +728,7 @@ $('#tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b&&!
 $('#grid').addEventListener('click',e=>{const b=e.target.closest('.cat');if(b){sfx.tap();b.classList.remove('wig');void b.offsetWidth;b.classList.add('wig');const [x,y]=ctr(b);burst(x,y,[CATS[+b.dataset.ci].icon,'✨'],8,110);setTimeout(()=>openCat(+b.dataset.ci),260)}});
 $('#koBtn').onclick=()=>{S.ko=!S.ko;save();renderHome()};
 $('#musicBtn').onclick=()=>{S.music=!S.music;save();renderHome();if(S.music)Music.on();else Music.off(.4)};
-$('#testBtn').onclick=async()=>{
+async function soundCheck(auto){
   unlockAudio();sfx.win();pickVoices();spokeOnce=false;lastErr='';
   const n=synth?synth.getVoices().length:0;
   if(!n){
@@ -662,12 +737,14 @@ $('#testBtn').onclick=async()=>{
     else toast('기기 음성이 없고 인터넷 발음도 받을 수 없어요. 태블릿 설정의 텍스트 음성 변환(TTS)에서 영어 음성 데이터를 설치해 주세요.');
     return;
   }
-  say([['Hello!','en'],['소리 잘 들려?','ko']],$('#ghost'));
+  say([['Hello!','en'],[auto?'시우링고 시작! 오늘도 재밌게 배워 보자!':'소리 잘 들려?','ko']],$('#ghost'));act($('#ghost'),'happy',1500);emote($('#ghost'),'👋');
   setTimeout(()=>{
+    if(auto&&spokeOnce){toast('🔈 소리 준비 완료!',2500);return}
     const info=`[음성 ${n}개 · 영어 ${V.en?V.en.name:'없음'} · 한국어 ${V.ko?'있음':'없음'}${lastErr?' · 오류 '+lastErr:''}]`;
     toast(spokeOnce?'소리가 정상이에요! '+info:'음성이 재생되지 않았어요. 볼륨과 무음 모드를 확인해 주세요. '+info);
   },2500);
-};
+}
+$('#testBtn').onclick=()=>soundCheck(false);
 const TAP_LINES=['히히, 간지러워!','왜 불렀어?','나 여기 있어!','하이파이브!','같이 놀자!'];
 document.addEventListener('click',e=>{
   const c=e.target.closest('.critter');if(!c)return;
@@ -898,6 +975,7 @@ function answer(ok,s){
   const h=$('#lhost'),zone=$('#q .slots')||$('#q .kopts')||$('#q .pairs')||$('#q'),[zx,zy]=ctr(zone);
   if(ok){L.correct++;if(!isPairs){L.combo++;L.best=Math.max(L.best,L.combo);sfx.ok();if(L.combo>=3&&L.combo%3===0)setTimeout(()=>sfx.combo(L.combo),250)}
     burst(zx,zy,['⭐','✨','🌟'],14,130);floatText(zx,zy-40,L.combo>=3?`+${10+L.combo*2}`:'+10');
+    setTimeout(()=>capyRun(isPairs?3:L.combo>=5?3:L.combo>=3?2:1),200);
     if(L.combo>=3){act(h,'dance',1800);emote(h,'🔥');if(L.combo%5===0)confetti()}else{act(h,'happy');emote(h,rnd(['⭐','❤️','😆','👍','🎉']))}}
   else{L.mistakes++;L.combo=0;sfx.no();act(h,'sweat',1800);emote(h,rnd(['💦','😅','🤔']));if(!s.retry)L.queue.push({...s,retry:true})}
   save();bar();comboUI();
@@ -979,7 +1057,7 @@ $('#bag').addEventListener('click',e=>{if(e.target.id==='bag')$('#bag').hidden=t
 const PEEK=['나도 놀러 왔어!','오늘 무슨 단어 배울래?','여기 숨어 있었지롱!','별 많이 모았네!','나 찾았다!'];
 let peekBusy=false;
 function peek(){
-  if(peekBusy||$('#home').hidden||!$('#catSheet').hidden||!$('#bag').hidden||Date.now()-lastInput>60000)return;
+  if(peekBusy||$('#home').hidden||!$('#startBox').hidden||!$('#catSheet').hidden||!$('#bag').hidden||Date.now()-lastInput>60000)return;
   peekBusy=true;const p=$('#peeker');
   setHost($('#peekC'),rnd(Object.keys(HOSTS)));$('#peekSay').textContent=rnd(PEEK);$('#peekSay').hidden=true;
   p.classList.add('up');setTimeout(()=>{$('#peekSay').hidden=false;act($('#peekC'),'hopS',600)},600);
@@ -987,5 +1065,6 @@ function peek(){
 }
 setInterval(peek,22000);setTimeout(peek,6000);
 renderHome();
-setTimeout(()=>{const g=$('#ghost');act(g,'happy',1500);emote(g,'👋')},500);
+setHost($('#shost'),'momo');
+$('#startBtn').onclick=()=>{$('#startBox').hidden=true;sfx.tap();soundCheck(true);if(S.music)Music.on()};
 </script>
