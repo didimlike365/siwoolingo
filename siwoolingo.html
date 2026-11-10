@@ -233,6 +233,13 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:4px;border:2px solid;vertical-align:-2px;margin-right:3px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));width:min(92%,480px);background:var(--ink);color:#fff;border-radius:16px;padding:12px 16px;font-size:15px;line-height:1.45;z-index:50;box-shadow:0 6px 20px rgba(0,0,0,.2)}
 /* 1단계 따라 말하기 검사 */
+.vtarget{display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:6px}
+.vtl{font-family:var(--display);font-size:16px;color:#D63A69}
+.vts{display:flex;align-items:center;gap:10px;background:#FFF0F5;border:3px solid #FF5C8A;border-radius:18px;padding:6px 16px;font-family:var(--word);font-size:34px;color:var(--ink);box-shadow:0 4px 0 #F4B6CB}
+.vts .vtp{font-size:30px;line-height:1}
+.vts .vtsp{color:#FF5C8A;display:grid}
+.vts .vtsp svg{width:26px;height:26px}
+.vtip{font-size:13px;color:var(--soft)}
 .vc{display:flex;align-items:center;gap:14px;justify-content:center}
 .bigmic.vcm{width:84px;height:84px}
 .bigmic.vcm .mi{font-size:40px}
@@ -1444,14 +1451,37 @@ function normT(t){return String(t).toLowerCase().replace(/[’']/g,'').replace(/
 function lev(a,b){const m=a.length,n=b.length;if(Math.abs(m-n)>2)return 9;const d=Array.from({length:m+1},(_,i)=>[i]);for(let j=1;j<=n;j++)d[0][j]=j;for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n]}
 // 글자 이름은 인식기가 비슷한 단어로 알아듣는 경우가 많아서 넉넉하게 인정
 const LSOUND={a:'a ay hey eh eight',b:'b be bee bea v',c:'c see sea she si',d:'d dee the de di',e:'e ee he i',f:'f eff if ef',g:'g gee jee ji g',h:'h age aitch each ach',i:'i eye aye hi ai',j:'j jay jae j',k:'k kay okay ok cay',l:'l el elle all ell',m:'m em am im',n:'n en and an in',o:'o oh owe',p:'p pee pea pe',q:'q queue cue kyu',r:'r are our or ar',s:'s es ass yes ess',t:'t tea tee ti',u:'u you yu ew',v:'v vee we b',w:'w doubleyou doubleu double',x:'x ex eggs axe ax',y:'y why wai wi',z:'z zee zed see'};
+// 소리가 비슷하면 같게 보는 발음 키 (ph→f, ck→k, c→k/s, 모음은 첫 글자만 남김 …)
+function phon(w){
+  w=String(w).toLowerCase().replace(/[^a-z]/g,'');if(!w)return '';
+  w=w.replace(/^(kn|gn|pn|wr)/,m=>m[1]).replace(/ph/g,'f').replace(/ck/g,'k').replace(/sh/g,'S').replace(/ch/g,'C').replace(/th/g,'0').replace(/wh/g,'w').replace(/gh/g,'').replace(/qu/g,'kw').replace(/x/g,'ks').replace(/c(?=[eiy])/g,'s').replace(/[cq]/g,'k').replace(/z/g,'s').replace(/v/g,'f').replace(/(.)\1+/g,'$1');
+  return ('aeiouy'.includes(w[0])?'A':w[0])+w.slice(1).replace(/[aeiouyhw]/g,'');
+}
+// 인식기가 자주 다른 철자로 적는 소리 같은 단어
+const HOMO={two:'to too',four:'for fore',eight:'ate',one:'won',eye:'i aye',bee:'be b',pear:'pair pare',ant:'aunt and aint',red:'read',blue:'blew',tea:'t tee',sun:'son',hair:'hare',meat:'meet',flower:'flour',bear:'bare',deer:'dear',nose:'knows',sea:'see',see:'sea c',night:'knight',no:'know',write:'right',hi:'high',by:'buy bye',ate:'eight',rose:'rows',nut:'not',mail:'male',tail:'tale',knee:'nee',toe:'tow',plane:'plain',van:'ban fan',pen:'pan pin',leg:'lag',bed:'bad bet',pig:'big',cup:'cop',bat:'bad',hat:'had',jet:'jab',ox:'ax oaks',owl:'al',egg:'eg',ear:'here year',arm:'um',lip:'lit',key:'kee',box:'bucks',bus:'boss',kiwi:'cui'};
+// 소리 기준 철자 (모음 유지): ph→f, 겹자음 하나로, c→k/s, 부드러운 g→j, 끝 묵음 e 제거
+function pf(w){
+  w=String(w).toLowerCase().replace(/[^a-z]/g,'');if(!w)return '';
+  w=w.replace(/^(kn|gn|pn|wr)/,m=>m[1]).replace(/ph/g,'f').replace(/ck/g,'k').replace(/sh/g,'S').replace(/ch/g,'C').replace(/th/g,'0').replace(/wh/g,'w').replace(/gh/g,'').replace(/qu/g,'kw').replace(/x/g,'ks').replace(/c(?=[eiy])/g,'s').replace(/g(?=[eiy])/g,'j').replace(/[cq]/g,'k').replace(/z/g,'s').replace(/(.)\1+/g,'$1');
+  if(w.length>3)w=w.replace(/e$/,'');return w;
+}
+function wordHit(t,A){
+  const hs=(HOMO[t]||'').split(' '),pt=pf(t);
+  return A.some(x=>{
+    if(x===t||hs.includes(x))return true;
+    const d=lev(pf(x),pt),r=lev(x,t);
+    if(t.length<=4)return Math.min(d,r)<=1&&pf(x)[0]===pt[0];
+    return d<=(t.length>=7?2:1)||r<=(t.length>=7?2:t.length>=6?2:1)&&r<lev(x.slice(0,2),t.slice(0,2))+2&&x[0]===t[0];
+  });
+}
 function matchWords(words,alts,letter){
   let best={score:0,hits:words.map(()=>false),heard:alts[0]||''};
   for(const a of alts){
     const A=normT(a),Aj=A.join('');let hits;
-    if(letter){const ok=A.some(t=>LSOUND[letter].split(' ').includes(t))||LSOUND[letter].split(' ').includes(Aj);hits=[ok]}
+    if(letter){const L2=LSOUND[letter].split(' ');hits=[A.some(t=>L2.includes(t))||L2.includes(Aj)]}
     else{
       hits=words.map(w=>{const tk=normT(w);if(!tk.length)return true;
-        return tk.every(t=>A.some(x=>x===t||(t.length>=4&&lev(x,t)<=(t.length>=7?2:1))))||(tk.length>1&&Aj.includes(tk.join('')))||(tk.join('').length>=5&&Aj.includes(tk.join('')))});
+        return tk.every(t=>wordHit(t,A))||(tk.length>1&&Aj.includes(tk.join('')))||(tk.join('').length>=5&&(Aj.includes(tk.join(''))||lev(Aj,tk.join(''))<=2))});
       const all=normT(words.join(' ')).join('');if(all.length>=5&&Aj.includes(all))hits=words.map(()=>true);
     }
     const sc=hits.filter(Boolean).length/words.length;
@@ -1496,11 +1526,11 @@ function speakStep(s,q,o){
     if(curRec||L.lock)return;
     try{synth&&synth.cancel()}catch(e){}micRelease();
     let rec;try{rec=new SR()}catch(e){srBroken=true;return R[s.t](s,q)}
-    rec.lang='en-US';rec.interimResults=true;rec.maxAlternatives=5;rec.continuous=false;curRec=rec;
+    rec.lang='en-US';rec.interimResults=true;rec.maxAlternatives=10;rec.continuous=false;curRec=rec;
     const alts=[];let interim='',err='';
     btn.classList.add('on');lab.textContent='듣고 있어… 말해 봐!';heard.textContent='';mark([],false);
     const h=$('#lhost');act(h,'lean',2500);emote(h,'👂');tone(880,0,.12,'sine',.12);
-    rec.onresult=e=>{let txt='';for(let i=0;i<e.results.length;i++){const r=e.results[i];txt+=r[0].transcript;if(r.isFinal)for(let k=0;k<r.length;k++)alts.push(r[k].transcript)}
+    rec.onresult=e=>{let txt='';for(let i=0;i<e.results.length;i++){const r=e.results[i];txt+=r[0].transcript;for(let k=0;k<r.length;k++){const tx=r[k].transcript;if(tx&&!alts.includes(tx))alts.push(tx)}}
       interim=txt;heard.textContent=txt;mark(matchWords(o.words,[txt],o.letter).hits,false)};
     rec.onerror=e=>{err=e.error||'error'};
     rec.onend=()=>{
@@ -1531,24 +1561,27 @@ function unlockGot(){const g=$('#gotit');if(!g||!g.disabled)return;g.disabled=fa
 function voiceCheck(slot,o,onPass){
   if(!slot)return;
   const mode=SR&&!srBroken?'sr':(Mic.ok&&!Mic.denied?'rec':'self');
+  const tgt=o.say?`<div class="vtarget"><span class="vtl">🎤 이렇게 말해 봐</span><button class="vts" id="vtPlay"><span class="vtp">${o.sayPic||''}</span><b>${esc(o.say)}</b><span class="vtsp">${SPK}</span></button></div>`:'';
   let passed=false;
   const pass=(praise=true)=>{if(passed)return;passed=true;onPass();
     if(praise){const h=$('#lhost');act(h,'happy',1400);emote(h,'👏');const b=slot.querySelector('#vcMic,.micbtn')||slot;const [x,y]=ctr(b);burst(x,y,['👏','⭐','🎤'],12,120);sfx.ok();const m=rnd(VOICE_PRAISE);bubble(m);say([[m,'ko']])}};
-  if(mode==='rec'){slot.innerHTML='<p class="hint">🎤 녹음 버튼을 누르고 따라 말하면 다음으로 갈 수 있어!</p><div id="vcRec"></div>';micUI(slot.querySelector('#vcRec'),o.wobj,ok=>{if(ok)pass(false)});return}
-  if(mode==='self'){slot.innerHTML='<p class="hint big">🗣️ 소리 내어 따라 말해 봐!</p>';setTimeout(()=>pass(false),2500);return}
-  slot.innerHTML=`<div class="vc"><button class="bigmic vcm" id="vcMic" aria-label="눌러서 따라 말하기"><span class="mw"></span><span class="mi">🎤</span></button><div class="vct"><div class="mlab" id="vcLab">눌러서 따라 말하기</div><div class="heard" id="vcHeard"></div></div></div><button class="link" id="vcOver" hidden>🙋 어른 확인: 잘 말했어요</button>`;
+  const hookT=()=>{const b=slot.querySelector('#vtPlay');if(b)b.onclick=()=>{sfx.tap();say(o.audio);notes(b)}};
+  if(mode==='rec'){slot.innerHTML=tgt+'<p class="hint">🎤 녹음 버튼을 누르고 따라 말하면 다음으로 갈 수 있어!</p><div id="vcRec"></div>';hookT();micUI(slot.querySelector('#vcRec'),o.wobj,ok=>{if(ok)pass(false)});return}
+  if(mode==='self'){slot.innerHTML=tgt+'<p class="hint big">🗣️ 소리 내어 따라 말해 봐!</p>';hookT();setTimeout(()=>pass(false),2500);return}
+  slot.innerHTML=tgt+`<div class="vc"><button class="bigmic vcm" id="vcMic" aria-label="눌러서 따라 말하기"><span class="mw"></span><span class="mi">🎤</span></button><div class="vct"><div class="mlab" id="vcLab">눌러서 말하기</div><div class="vtip">삑 소리가 나면 크게!</div><div class="heard" id="vcHeard"></div></div></div><button class="link" id="vcOver" hidden>🙋 어른 확인: 잘 말했어요</button>`;
+  hookT();
   const btn=slot.querySelector('#vcMic'),lab=slot.querySelector('#vcLab'),heard=slot.querySelector('#vcHeard');let tries=0;
   slot.querySelector('#vcOver').onclick=()=>pass();
-  const ok=alts=>matchWords(o.words,alts,o.letter).score>=1||(o.alt&&matchWords([o.alt],alts,null).score>=1);
+  const ok=alts=>matchWords(o.words,alts,o.letter).score>=1||(o.letterAlt&&matchWords([o.letterAlt],alts,o.letterAlt).score>=1);
   btn.onclick=()=>{
     if(curRec||passed)return;
     try{synth&&synth.cancel()}catch(e){}micRelease();
     let rec;try{rec=new SR()}catch(e){srBroken=true;return voiceCheck(slot,o,onPass)}
-    rec.lang='en-US';rec.interimResults=true;rec.maxAlternatives=5;rec.continuous=false;curRec=rec;
+    rec.lang='en-US';rec.interimResults=true;rec.maxAlternatives=10;rec.continuous=false;curRec=rec;
     const alts=[];let interim='',err='';
     btn.classList.add('on');lab.textContent='듣고 있어… 말해 봐!';heard.textContent='';
     const h=$('#lhost');act(h,'lean',2500);emote(h,'👂');tone(880,0,.12,'sine',.12);
-    rec.onresult=e=>{let txt='';for(let i=0;i<e.results.length;i++){const r=e.results[i];txt+=r[0].transcript;if(r.isFinal)for(let k=0;k<r.length;k++)alts.push(r[k].transcript)}interim=txt;heard.textContent=txt};
+    rec.onresult=e=>{let txt='';for(let i=0;i<e.results.length;i++){const r=e.results[i];txt+=r[0].transcript;for(let k=0;k<r.length;k++){const tx=r[k].transcript;if(tx&&!alts.includes(tx))alts.push(tx)}}interim=txt;heard.textContent=txt};
     rec.onerror=e=>{err=e.error||'error'};
     rec.onend=()=>{
       if(curRec!==rec)return;curRec=null;clearTimeout(rec._t);btn.classList.remove('on');lab.textContent='다시 눌러서 말하기';
@@ -1561,7 +1594,7 @@ function voiceCheck(slot,o,onPass){
       sfx.no();act(h,'sweat',1200);emote(h,'💦');
       bubble(rnd(['아깝다! 잘 듣고 한 번 더!','조금만 더 또박또박 말해 봐!','다시 들어 보고 따라 해 보자!']));
       setTimeout(()=>say(o.audio),700);
-      if(tries>=3)slot.querySelector('#vcOver').hidden=false;
+      if(tries>=2)slot.querySelector('#vcOver').hidden=false;
     };
     rec._t=setTimeout(()=>{try{rec.stop()}catch(e){}},6000);
     try{rec.start()}catch(e){curRec=null;srBroken=true;voiceCheck(slot,o,onPass)}
@@ -1689,7 +1722,7 @@ const R={
     play(true);
     lts.forEach((b,i)=>b.onclick=()=>{hl(i);sayLetter(w.w[i])});
     $('#again').onclick=()=>{sfx.tap();play(false)};
-    voiceCheck($('#micSlot'),w.abc?{words:[w.l],letter:w.l,alt:w.w,audio:[[NAME[w.l],'ph'],[w.w,'en']],wobj:w}:{words:[w.w],audio:[[w.w,'en']],wobj:w},unlockGot);
+    voiceCheck($('#micSlot'),w.abc?{words:[w.w],letterAlt:w.l,say:w.w,sayPic:pic(w.e),audio:[[w.w,'en']],wobj:{...w,abc:false}}:{words:[w.w],say:w.w,sayPic:pic(w.e),audio:[[w.w,'en']],wobj:w},unlockGot);
     $('#gotit').onclick=()=>{if(Mic.busy)return;sfx.tap();L.correct++;mood($('#lhost'),'happy');next()};
   },
   // 듣고 쓰기
@@ -1778,7 +1811,7 @@ const R={
   },
   // [알파벳] 새 글자: 큰 대문자·소문자 + 예시 단어 (첫 글자 강조)
   aIntro(s,q){
-    const w=s.w;bubble('새 글자야! 듣고 🎤 글자 이름을 말해 봐');
+    const w=s.w;bubble('새 글자야! 아래 단어를 🎤 따라 말해 봐');
     const exw=[...w.w].map((c,i)=>i===w.ex?`<b class="exl">${c}</b>`:c).join('');
     q.innerHTML=`<div class="abcBig"><span class="up" id="aU">${w.U}</span><span class="lo" id="aL">${w.l}</span></div>
       <div class="abcEx" id="aE"><span class="pic sm">${pic(w.e)}</span><span><span class="exw">${exw}</span><span class="kor">${w.k}</span></span></div>
@@ -1790,7 +1823,7 @@ const R={
     play(true);
     $('#aU').onclick=()=>{hl('aU');say([[ln,'ph']])};$('#aL').onclick=()=>{hl('aL');say([[ln,'ph']])};$('#aE').onclick=()=>{hl('aE');sayWord(w)};
     $('#again').onclick=()=>{sfx.tap();play(false)};
-    voiceCheck($('#micSlot'),w.abc?{words:[w.l],letter:w.l,alt:w.w,audio:[[NAME[w.l],'ph'],[w.w,'en']],wobj:w}:{words:[w.w],audio:[[w.w,'en']],wobj:w},unlockGot);
+    voiceCheck($('#micSlot'),w.abc?{words:[w.w],letterAlt:w.l,say:w.w,sayPic:pic(w.e),audio:[[w.w,'en']],wobj:{...w,abc:false}}:{words:[w.w],say:w.w,sayPic:pic(w.e),audio:[[w.w,'en']],wobj:w},unlockGot);
     $('#gotit').onclick=()=>{if(Mic.busy)return;sfx.tap();L.correct++;act($('#lhost'),'happy');emote($('#lhost'),'⭐');next()};
   },
   // [알파벳] 글자 이름 듣고 고르기 (기기 영어 음성이 없으면 첫 글자 찾기로 대체)
