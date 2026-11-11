@@ -232,6 +232,40 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 .legend{display:flex;gap:12px;font-size:13px;color:var(--soft);flex-wrap:wrap}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:4px;border:2px solid;vertical-align:-2px;margin-right:3px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));width:min(92%,480px);background:var(--ink);color:#fff;border-radius:16px;padding:12px 16px;font-size:15px;line-height:1.45;z-index:50;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.homechip{text-decoration:none;color:var(--ink)}
+/* 음성 게임·말로 답하기·목소리 효과 */
+.ropts.vhide{display:none}
+.ropts.vhelp{animation:pop .4s}
+.vlive{position:absolute;left:10px;top:10px;z-index:6;background:rgba(255,255,255,.9);border-radius:99px;padding:4px 12px;font-family:var(--display);font-size:15px;display:flex;align-items:center;gap:6px;max-width:80%}
+.vlive i{font-style:normal;font-family:var(--word);color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vdot{width:10px;height:10px;border-radius:50%;background:#E5484D;animation:recP .9s infinite;flex:none}
+.garena.g-feed{background:linear-gradient(#FFE8C7,#FFD9A0 70%,#E9B872);height:min(46vh,380px)}
+.feeder{position:absolute;left:50%;bottom:8%;width:min(200px,42%);transform:translateX(-50%);line-height:0}
+.feeder svg{width:100%;height:auto}
+.feeder.chomp{animation:chomp .5s ease}
+@keyframes chomp{25%{transform:translateX(-50%) scale(1.08,.9)}50%{transform:translateX(-50%) scale(.95,1.08)}75%{transform:translateX(-50%) scale(1.05,.95)}}
+.fplate{position:absolute;left:50%;bottom:2%;transform:translateX(-50%);font-size:40px}
+.fthink{position:absolute;right:8%;top:8%;width:120px;height:100px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:56px;box-shadow:0 4px 0 rgba(0,0,0,.08)}
+.fthink::before,.fthink::after{content:"";position:absolute;background:#fff;border-radius:50%}
+.fthink::before{width:26px;height:26px;left:-8px;bottom:-6px}
+.fthink::after{width:14px;height:14px;left:-26px;bottom:-22px}
+.fthink.pop{animation:pop .4s}
+.fthink .numpic,.fthink .swatch{font-size:56px}
+.ffly{position:absolute;font-size:48px;transform:translate(-50%,-50%);transition:left .5s cubic-bezier(.3,.8,.5,1),top .5s cubic-bezier(.5,-.4,.7,1),transform .5s;z-index:3}
+.hintw{font-family:var(--word);font-size:30px;color:var(--vow);margin-right:10px}
+.vsmall{display:flex;align-items:center;gap:10px}
+.fxbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.fxb{display:flex;flex-direction:column;align-items:center;gap:0;border:none;background:#fff;border-radius:16px;padding:6px 10px;box-shadow:0 4px 0 var(--line);min-width:62px}
+.fxb span{font-size:30px;line-height:1.1}
+.fxb small{font-family:var(--display);font-size:13px;color:var(--soft)}
+.fxb.pop{animation:pop .35s}
+.vpchip{background:#FFF0F5;border-color:#FF9EBB}
+.vfxchip.on{background:#FFE9A8;border-color:#F2B700;animation:vfxw 1.6s ease-in-out infinite}
+@keyframes vfxw{50%{transform:rotate(-3deg) scale(1.05)}}
+.vfxbadge{position:fixed;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:40;background:#FFE9A8;border:2px solid #F2B700;border-radius:99px;padding:3px 10px;font-family:var(--display);font-size:15px;pointer-events:none;box-shadow:0 3px 0 rgba(0,0,0,.08)}
+.vpw{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.vprec{display:flex;align-items:center;gap:12px;justify-content:center}
+.vplink{display:block;margin:4px auto 0;font-size:16px;color:#D63A69}
 /* 1단계 따라 말하기 검사 */
 .vtarget{display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:6px}
 .vtl{font-family:var(--display);font-size:16px;color:#D63A69}
@@ -325,6 +359,9 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 @keyframes rtrip{20%{transform:rotate(25deg) translateY(10px)}80%{transform:rotate(25deg) translateY(10px)}}
 .hurdle{position:absolute;bottom:24%;left:105%;font-size:58px;line-height:1;z-index:1}
 .hurdle.go{animation:hurdle var(--t) linear forwards}
+.hurdle.goV{animation:hurdleV 3s ease-out forwards}
+@keyframes hurdleV{from{left:105%}to{left:32%}}
+.gmic{display:flex;align-items:center;gap:12px;justify-content:center}
 @keyframes hurdle{from{left:105%}to{left:20%}}
 .ropts{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%;max-width:640px}
 .ropt{flex:1;min-width:110px;background:var(--card);border:3px solid var(--line);border-bottom-width:7px;border-radius:18px;padding:14px 10px;font-family:var(--word);font-weight:700;font-size:26px}
@@ -523,6 +560,9 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
       <span class="chip" title="연속 학습일">🔥 <b id="sStreak">0</b>일</span>
       <span class="chip" title="모은 별">⭐ <b id="sStars">0</b></span>
       <button class="chip btnchip" id="bagBtn">🎒 <b id="sWords">0</b></button>
+      <a class="chip btnchip homechip" id="homeLink" href="https://didimlike365.github.io/" hidden>🏠 놀이터</a>
+      <button class="chip btnchip vpchip" id="vpBtn">🎙️ 목소리 놀이</button>
+      <button class="chip btnchip vfxchip" id="vfxBtn">🎭 변조 끔</button>
       <button class="chip btnchip" id="musicBtn">🎵 음악 켬</button>
       <button class="chip btnchip" id="koBtn">안내 소리 켬</button>
       <button class="chip btnchip" id="testBtn">🔈 소리 확인</button>
@@ -602,6 +642,7 @@ button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
     <button class="btn wide" id="startBtn">▶ 시작하기</button>
   </div>
 </div>
+<div class="overlay" id="voicePlay" hidden><div class="panel" id="vpPanel"></div></div>
 <div id="confetti"></div>
 <div id="fx"></div>
 <div class="peeker" id="peeker"><div class="say" id="peekSay"></div><div class="critter" id="peekC"></div></div>
@@ -686,7 +727,7 @@ const OOPS=['괜찮아, 다시 해 보자','아깝다! 정답은 이거야','천
 
 /* ================= 저장 ================= */
 const KEY='siwoolingo-v2';
-let S={stars:0,streak:0,lastDay:'',goalDay:'',goalCount:0,lv:1,view:0,p:{},w:{},ko:true,music:true,set:{}};
+let S={stars:0,streak:0,lastDay:'',goalDay:'',goalCount:0,lv:1,view:0,p:{},w:{},ko:true,music:true,set:{},vfx:'normal'};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
 if(!S.abcSeen){S.view=0;S.abcSeen=true}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
@@ -794,6 +835,7 @@ function say(parts,el,onDone){
   if(talker)talker.classList.remove('talk');
   talker=el||curHost();
   parts=parts.filter(p=>p[1]!=='ko'||S.ko);
+  if(S.vfx==='echo')parts=parts.flatMap(p=>p[1]==='ph'?[p]:[[p[0],p[1],{...(p[2]||{}),gap:20}],[p[0],p[1],{...(p[2]||{}),vol:.4,gap:20,echo:1}],[p[0],p[1],{...(p[2]||{}),vol:.15,echo:1}]]);
   if(parts.length)Music.duck(true);
   let i=0;
   const step=()=>{
@@ -802,17 +844,18 @@ function say(parts,el,onDone){
     const [t,lang,opt={}]=parts[i++];
     let done=false,tm;
     const fin=()=>{if(done)return;done=true;clearTimeout(tm);if(id===sayId){talker&&talker.classList.remove('talk');setTimeout(step,opt.gap??140)}};
-    const begin=()=>{spokeOnce=true;if(id!==sayId)return;talker&&talker.classList.add('talk');if(lang==='en'&&!opt.onstart)notes(talker);opt.onstart&&opt.onstart()};
+    const begin=()=>{spokeOnce=true;if(id!==sayId)return;talker&&talker.classList.add('talk');if(opt.echo)return;if(lang==='en'&&!opt.onstart)notes(talker);opt.onstart&&opt.onstart()};
     if(!useTTS){
       const u=lang==='en'?enCache[t.toLowerCase()]:'';
       if(!u){opt.onstart&&opt.onstart();tm=setTimeout(fin,lang==='ph'?350:10);return}
-      const a=new Audio(u);curAudio=a;a.onplaying=begin;a.onended=fin;a.onerror=fin;tm=setTimeout(fin,4000);
+      const a=new Audio(u);curAudio=a;vfxAudio(a);if(opt.vol)a.volume=opt.vol;a.onplaying=begin;a.onended=fin;a.onerror=fin;tm=setTimeout(fin,4000);
       a.play().catch(fin);return;
     }
     const u=new SpeechSynthesisUtterance(t);
     if(lang==='ko'){u.lang='ko-KR';if(V.ko)u.voice=V.ko;u.rate=1.05;u.pitch=1.35}
     else{u.lang='en-US';if(V.en)u.voice=V.en;u.rate=opt.rate||(lang==='ph'?.9:.78);u.pitch=1.15}
-    tm=setTimeout(fin,1400+t.length*(lang==='ko'?190:150));
+    vfxUtter(u);if(opt.vol)u.volume=opt.vol;
+    tm=setTimeout(fin,(1400+t.length*(lang==='ko'?190:150))/Math.min(1,u.rate));
     u.onend=fin;u.onerror=e=>{lastErr=e&&e.error||'error';fin()};u.onstart=begin;
     try{synth.resume()}catch(e){}
     synth.speak(u);
@@ -820,6 +863,11 @@ function say(parts,el,onDone){
   if(busy)setTimeout(step,isIOS?80:0);else step();
 }
 const sayWord=(w,el)=>say([[w.w,'en']],el);
+function vfxUtter(u){const f=S.vfx;
+  if(f==='squirrel'){u.pitch=2;u.rate=Math.min(2,u.rate*1.2)}
+  else if(f==='giant'){u.pitch=0;u.rate=u.rate*.82}
+  else if(f==='robot'){u.pitch=.4;u.rate=u.rate*.8}}
+function vfxAudio(a){const f=S.vfx,r=f==='squirrel'?1.6:f==='giant'?.7:f==='robot'?.85:1;if(r===1)return;a.playbackRate=r;try{a.preservesPitch=false;a.mozPreservesPitch=false;a.webkitPreservesPitch=false}catch(e){}}
 const sayLetter=c=>{if(ttsOK()&&V.en)say([[NAME[c.toLowerCase()],'ph']])};
 let audioOn=false;
 function unlockAudio(){
@@ -981,6 +1029,7 @@ function renderHome(){
   $('#sWords').textContent=`${ALLW.filter(mastered).length}/${ALLW.length}`;
   $('#koBtn').textContent=S.ko?'안내 소리 켬':'안내 소리 끔';
   $('#musicBtn').textContent=S.music?'🎵 음악 켬':'🎵 음악 끔';
+  vfxShow();
   const g=S.goalCount,lv=S.view,nc=nextCat(lv);
   const U=unitsOf(lv),host=nc>=0?U[nc].host:'momo';setHost($('#ghost'),host);
   $('#gDots').innerHTML=Array.from({length:GOAL},(_,k)=>`<i class="${k<g?'on':''}"></i>`).join('');
@@ -996,6 +1045,19 @@ function renderHome(){
 $('#tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b&&!b.disabled){S.view=+b.dataset.lv;save();sfx.tap();renderHome()}});
 $('#grid').addEventListener('click',e=>{const b=e.target.closest('.cat');if(b){sfx.tap();b.classList.remove('wig');void b.offsetWidth;b.classList.add('wig');const [x,y]=ctr(b);burst(x,y,[unitsOf(S.view)[+b.dataset.ci].emo||CATS[+b.dataset.ci].icon,'✨'],8,110);setTimeout(()=>openCat(+b.dataset.ci),260)}});
 $('#koBtn').onclick=()=>{S.ko=!S.ko;save();renderHome()};
+/* 변조 모드: 누를 때마다 끔→다람쥐→거인→로봇→메아리. 켜 두면 레슨·게임 내내 그 목소리로 */
+const VFX_LINE={squirrel:'Hi! I am a squirrel!',giant:'Ho ho! I am a giant!',robot:'Beep. I am a robot.',echo:'Hello, hello!'};
+function vfxShow(){
+  const b=$('#vfxBtn');if(!b)return;const f=FXS.find(x=>x[0]===(S.vfx||'normal'));const on=S.vfx&&S.vfx!=='normal';
+  b.textContent=on?`${f[1]} 변조: ${f[2]}`:'🎭 변조 끔';b.classList.toggle('on',!!on);
+  let bd=$('#vfxBadge');if(on){if(!bd){bd=document.createElement('div');bd.id='vfxBadge';bd.className='vfxbadge';document.body.appendChild(bd)}bd.textContent=`${f[1]} ${f[2]} 목소리`}else if(bd)bd.remove();
+}
+$('#vfxBtn').onclick=()=>{
+  const order=FXS.map(x=>x[0]);S.vfx=order[(order.indexOf(S.vfx||'normal')+1)%order.length];save();vfxShow();sfx.tap();
+  const b=$('#vfxBtn');const [x,y]=ctr(b);burst(x,y,[FXS.find(f=>f[0]===S.vfx)[1],'✨'],6,70);
+  if(S.vfx==='normal')say([['변조 끝! 원래 목소리야','ko']]);else say([[VFX_LINE[S.vfx],'en',{rate:.9}]]);
+};
+$('#vpBtn').onclick=()=>{sfx.tap();openVoicePlay()};
 $('#musicBtn').onclick=()=>{S.music=!S.music;save();renderHome();if(S.music)Music.on();else Music.off(.4)};
 async function soundCheck(auto){
   unlockAudio();sfx.win();pickVoices();spokeOnce=false;lastErr='';
@@ -1131,7 +1193,8 @@ function buildConvo(lv,ci){
   for(const d of shuffle(P)){if(D.length>=4)break;if(used.has(d.src.id))continue;if(D.filter(x=>x.tpl===d.tpl).length>=2&&P.some(x=>x.tpl!==d.tpl&&!used.has(x.src.id)))continue;used.add(d.src.id);D.push(d)}
   while(D.length<4)D.push(rnd(P));
   const g=rnd(GREET),gg={...g,w:g.a,k:g.ak,convo:true,picH:''};
-  return [st('cMeaning',gg),st('cReply',gg),st('cReply',D[0]),st('cBlank',D[1]),st('cBuild',D[0]),st('cMeaning',D[2]),st('cReply',D[2]),st('cBlank',D[3]),st('cBuild',D[1])].map(x=>(x.pool=P,x));
+  const V=srAvail()?'cVoice':'cBlank';
+  return [st('cMeaning',gg),st('cReply',gg),st('cReply',D[0]),st(V,D[1]),st('cBlank',D[2]),st('cMeaning',D[3]),st(V,D[0]),st('cBlank',D[3]),st('cBuild',D[1])].map(x=>(x.pool=P,x));
 }
 
 /* 주사위: 같은 카테고리·레벨의 다른 6단어 세트로 바꾸기 */
@@ -1224,10 +1287,12 @@ function buildAbc(ci,step){
   weakLetters(ci).slice(0,2).forEach(w=>q.splice(2+Math.floor(Math.random()*(q.length-2)),0,st('aCase',w,{dir:Math.random()<.5?'U2l':'l2U'})));
   return q;
 }
-const GAME_OF=['balloon','mole','run'];
+const GAME_OF=['balloon','mole','run','vballoon','feed'];
 function buildLesson(lv,ci,step){
   const q=buildLesson0(lv,ci,step),W=unitWords(lv,ci);
-  if(step<3)q.push(st('mg',null,{game:GAME_OF[step],ws:lv===0&&ABCG[ci].all?shuffle(W).slice(0,6):W}));
+  // 2·3단계: 그림 보고 영어로 말하기 2문제 (말 인식이 되는 기기에서만)
+  if((step===1||step===2)&&srAvail()){const ws=shuffle(W.filter(w=>!/[^a-z]/i.test(w.w))).slice(0,2);ws.forEach((w,k)=>q.splice(Math.min(q.length,3+k*4),0,st('sayPic',w)))}
+  q.push(st('mg',null,{game:GAME_OF[step],ws:lv===0&&ABCG[ci].all?shuffle(W).slice(0,6):W}));
   return q;
 }
 function buildLesson0(lv,ci,step){
@@ -1272,10 +1337,10 @@ function rec(w,ok){const r=S.w[w.id]||(S.w[w.id]={ok:0,wrong:0});if(ok)r.ok++;el
    각 칸 끝 보너스 판: 1칸 풍선 터뜨리기 · 2칸 카피바라 두더지 · 3칸 카피바라 달리기 (6판)
    단어: 풍선 = 영어 단어 보고 그림 풍선 / 두더지 = 한글 뜻 듣고 영어 팻말 / 달리기 = 그림 보고 영어 단어
    알파벳: 풍선 = 대문자 보고 소문자 / 두더지 = 소문자 보고 대문자 / 달리기 = 그림 보고 첫 글자 */
-const GAMES={balloon:{n:'풍선 터뜨리기',i:'🎈',how:'맞는 풍선을 터뜨려!'},mole:{n:'카피바라 두더지',i:'🔨',how:'맞는 팻말 카피바라를 콕!'},run:{n:'카피바라 달리기',i:'🏃',how:'통나무에 닿기 전에 골라!'}};
+const GAMES={balloon:{n:'풍선 터뜨리기',i:'🎈',how:'맞는 풍선을 터뜨려!'},mole:{n:'카피바라 두더지',i:'🔨',how:'맞는 팻말 카피바라를 콕!'},run:{n:'카피바라 달리기',i:'🏃',how:'통나무에 닿기 전에 골라!',vhow:'🎤 누르고 그림을 영어로 말하면 점프!'},vballoon:{n:'말로 풍선 터뜨리기',i:'🎈',how:'맞는 풍선을 터뜨려!',vhow:'🎤 누르고 풍선 그림을 말하면 펑!'},feed:{n:'카피바라 밥 주기',i:'🍽️',how:'먹고 싶은 걸 골라 줘!',vhow:'🎤 누르고 먹고 싶은 걸 말해 줘!'}};
 const BCOL=['#FF6B6B','#FFB347','#FFD93D','#6BCB77','#4D96FF','#C77DFF','#FF8FC0'];
 let GSPEED=1,GM=null;
-function stopGame(){if(!GM)return;GM.timers.forEach(clearTimeout);GM.ints.forEach(clearInterval);GM=null}
+function stopGame(){stopStream();if(!GM)return;GM.timers.forEach(clearTimeout);GM.ints.forEach(clearInterval);GM=null}
 function gT(f,ms){const t=setTimeout(()=>{if(GM)f()},ms*GSPEED);GM.timers.push(t);return t}
 function gI(f,ms){const t=setInterval(()=>{if(GM)f()},ms*GSPEED);GM.ints.push(t);return t}
 function gOthers(w,n){
@@ -1290,10 +1355,13 @@ function startGame(s,q){
   const W=s.ws,abc=!!W[0].abc,g=GAMES[s.game];
   let T=shuffle(W);while(T.length<6)T=T.concat(shuffle(W));T=T.slice(0,6);
   GM={s,T,idx:0,miss:0,hits:0,timers:[],ints:[],abc,target:null,busy:false};
-  bubble(`${g.i} 보너스 게임! ${g.how}`);
-  q.innerHTML=`<div class="ghead"><span class="gname">${g.i} ${g.n}</span><button class="gprompt" id="gp" aria-label="다시 듣기"></button><span class="gscore" id="gs">⭐ 0/6</span></div><div class="garena g-${s.game}" id="arena"></div>${s.game==='run'?'<div class="ropts" id="ropts"></div>':''}`;
+  const voice=!!g.vhow&&srAvail();GM.voice=voice;
+  bubble(`${g.i} 보너스 게임! ${voice?g.vhow:g.how}`);
+  q.innerHTML=`<div class="ghead"><span class="gname">${g.i} ${g.n}</span><button class="gprompt" id="gp" aria-label="다시 듣기"></button><span class="gscore" id="gs">⭐ 0/6</span></div><div class="garena g-${s.game}" id="arena"></div>${s.game==='run'||s.game==='feed'?'<div class="ropts" id="ropts"></div>':''}`;
   $('#gp').onclick=()=>{if(GM&&GM.target)gSay(GM.target)};
-  ({balloon:gBalloon,mole:gMole,run:gRun})[s.game]();
+  ({balloon:gBalloon,mole:gMole,run:gRun,vballoon:voice?gVBalloon:gBalloon,feed:gFeed})[s.game]();
+  if(voice)$('#arena').insertAdjacentHTML('afterend','<div class="gmic"><button class="bigmic vcm" id="gmicBtn" aria-label="눌러서 말하기"><span class="mw"></span><span class="mi">🎤</span></button><div><div class="mlab" id="gmicLab">눌러서 말하기</div><div class="heard" id="gmicHeard"></div></div></div>');
+  if(voice)gMicWire();
 }
 function gPrompt(html){const p=$('#gp');p.innerHTML=html;p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}
 function gGood(el,next){
@@ -1359,28 +1427,95 @@ function gMole(){
 }
 /* 카피바라 달리기 */
 function gRun(){
-  const arena=$('#arena'),opts=$('#ropts'),kind=GM.abc?'lo':'en';
+  const arena=$('#arena'),opts=$('#ropts'),kind=GM.abc?'lo':'en',V=GM.voice;
   arena.innerHTML=`<div class="sky"></div><div class="ground"></div><div class="runner" id="runner">${capySVG()}</div><div class="hurdle" id="hurdle">🪵</div>`;
-  const runner=$('#runner'),hurdle=$('#hurdle');let trip=0,done=false;
+  const runner=$('#runner'),hurdle=$('#hurdle');let trip=0,help=0,done=false;
+  const RT=V?8500:6500;
+  const jump=(w,b)=>{done=true;clearTimeout(trip);clearTimeout(help);b&&b.classList.add('ok');gsfx.jump();gSay(w);
+    runner.classList.remove('jump');void runner.offsetWidth;runner.classList.add('jump');
+    const left=getComputedStyle(hurdle).left;hurdle.classList.remove('go','goV');hurdle.style.left=left;void hurdle.offsetWidth;hurdle.style.transition='left .7s linear';hurdle.style.left='-20%';
+    gGood(b||runner,round)};
   const round=()=>{
     const w=GM.T[GM.idx];GM.target=w;done=false;
-    gPrompt(GM.abc?`<span class="gP">${pic(w.e)}</span><small>${w.ex?'끝':'첫'} 글자는?</small>`:`<span class="gP">${pic(w.e)}</span><small>영어로 뭐지?</small>`);
-    const ch=shuffle([w,...gOthers(w,2)]);
-    opts.innerHTML=ch.map(x=>`<button class="ropt${kind==='lo'?' lo':''}" data-id="${x.id}">${gShow(x,kind)}</button>`).join('');
-    hurdle.style.transition='none';hurdle.style.left='';hurdle.classList.remove('go');void hurdle.offsetWidth;
-    hurdle.style.setProperty('--t',(6.5*GSPEED)+'s');hurdle.classList.add('go');
-    trip=gT(()=>{ if(done)return;done=true;GM.miss++;L.combo=0;comboUI();gsfx.trip();runner.classList.add('trip');act($('#lhost'),'sweat',1200);emote($('#lhost'),'💦');
-      opts.querySelectorAll('.ropt').forEach(b=>b.classList.add(b.dataset.id===w.id?'ok':'dim'));
-      GM.idx++;gT(()=>{runner.classList.remove('trip');GM.idx>=6?gEnd():round()},1300)},6500);
+    gPrompt(V?`<span class="gP">${pic(w.e)}</span><small>🎤 누르고 영어로 말하면 점프!</small>`:GM.abc?`<span class="gP">${pic(w.e)}</span><small>${w.ex?'끝':'첫'} 글자는?</small>`:`<span class="gP">${pic(w.e)}</span><small>영어로 뭐지?</small>`);
+    const okind=V?'en':kind,ch=shuffle([w,...gOthers(w,2)]);
+    opts.innerHTML=ch.map(x=>`<button class="ropt${okind==='lo'?' lo':''}" data-id="${x.id}">${V?x.w:gShow(x,okind)}</button>`).join('');
+    opts.classList.toggle('vhide',V);
+    if(V)help=gT(()=>{opts.classList.remove('vhide');opts.classList.add('vhelp')},7000);
+    hurdle.style.transition='none';hurdle.style.left='';hurdle.classList.remove('go','goV');void hurdle.offsetWidth;
+    hurdle.style.setProperty('--t',(RT/1000*GSPEED)+'s');hurdle.classList.add(V?'goV':'go');
+    if(!V)trip=gT(()=>{ if(done)return;done=true;GM.miss++;L.combo=0;comboUI();gsfx.trip();runner.classList.add('trip');act($('#lhost'),'sweat',1200);emote($('#lhost'),'💦');
+      opts.classList.remove('vhide');opts.querySelectorAll('.ropt').forEach(b=>b.classList.add(b.dataset.id===w.id?'ok':'dim'));gSay(w);
+      GM.idx++;gT(()=>{runner.classList.remove('trip');GM.idx>=6?gEnd():round()},1500)},RT);
     opts.querySelectorAll('.ropt').forEach(b=>b.onclick=()=>{
       if(!GM||done)return;
-      if(b.dataset.id===w.id){done=true;clearTimeout(trip);b.classList.add('ok');gsfx.jump();gSay(w);
-        runner.classList.remove('jump');void runner.offsetWidth;runner.classList.add('jump');
-        const left=getComputedStyle(hurdle).left;hurdle.classList.remove('go');hurdle.style.left=left;void hurdle.offsetWidth;hurdle.style.transition='left .7s linear';hurdle.style.left='-20%';
-        gGood(b,round)}
-      else{gBad(b);b.disabled=true}
+      if(b.dataset.id===w.id)jump(w,b);else{gBad(b);b.disabled=true}
     });
   };
+  if(V)GM.onVoice=alts=>{if(!done&&GM.target&&sayHit(GM.target.w,alts)){jump(GM.target,null);return true}return false};
+  round();
+}
+function gMicWire(){
+  const btn=$('#gmicBtn'),lab=$('#gmicLab'),heard=$('#gmicHeard');
+  btn.onclick=()=>{
+    if(!GM||curRec)return;
+    micListenOnce({btn,lab,heard},alts=>{
+      if(!GM)return;
+      if(!alts.length){bubble('잘 안 들렸어. 다시 눌러서 크게!');return}
+      if(GM.onVoice&&GM.onVoice(alts)){heard.classList.add('good');setTimeout(()=>heard.classList.remove('good'),700);lab.textContent='눌러서 말하기';return}
+      sfx.no();heard.classList.add('bad');setTimeout(()=>heard.classList.remove('bad'),900);act($('#lhost'),'puzzle',800);
+      bubble(rnd(['아깝다! 다시 눌러서 말해 봐!','그림을 잘 보고 한 번 더!']));
+      if(GM.target)setTimeout(()=>GM&&gSay(GM.target),600);
+    },()=>{if(GM){const st=GM.s;stopGame();startGame(st,$('#q'))}});
+  };
+}
+/* 말로 풍선 터뜨리기: 화면의 풍선 그림 중 아무거나 영어로 말하면 그 풍선이 펑 (6개) */
+function gVBalloon(){
+  const arena=$('#arena');let pops=0;
+  gPrompt(`<b class="gK">🎤 누르고 풍선 그림을 영어로!</b><small>아무 풍선이나 말해 봐</small>`);GM.target=null;
+  const alive=()=>[...arena.querySelectorAll('.bal:not(.pop):not(.fade)')];
+  const spawn=()=>{
+    const A=alive();if(A.length>=4)return;
+    const showing=new Set(A.map(b=>b.dataset.id)),pool=GM.s.ws.filter(w=>!showing.has(w.id));if(!pool.length)return;
+    const w=rnd(pool),b=document.createElement('button');b.className='bal';b.dataset.id=w.id;
+    b.style.left=(4+Math.random()*72)+'%';b.style.setProperty('--h',(arena.clientHeight+170)+'px');
+    b.style.setProperty('--d',(10+Math.random()*2.5)+'s');b.style.setProperty('--c',rnd(BCOL));
+    b.innerHTML=`<span class="bi"><span class="bc">${pic(w.e)}</span></span>`;
+    b.addEventListener('animationend',e=>{if(e.target===b)b.remove()});
+    b.onclick=()=>{gSay(w);b.classList.remove('nope');void b.offsetWidth;b.classList.add('nope');floatText(...ctr(b),'🎤 말로!')};
+    arena.appendChild(b);
+  };
+  GM.onVoice=alts=>{
+    for(const b of alive()){const w=GM.s.ws.find(x=>x.id===b.dataset.id);if(w&&sayHit(w.w,alts)){
+      b.style.transform=getComputedStyle(b).transform;b.style.animation='none';b.classList.add('pop');gsfx.pop();gSay(w);
+      const [x,y]=ctr(b);floatText(x,y-40,w.w);setTimeout(()=>b.remove(),300);gGood(b,()=>{});return true}}
+    return false;
+  };
+  spawn();gI(spawn,1100);
+}
+/* 카피바라 밥 주기: 카피바라가 생각하는 그림을 영어로 말하면(또는 골라 주면) 냠냠 */
+function gFeed(){
+  const arena=$('#arena'),opts=$('#ropts'),V=GM.voice;
+  arena.innerHTML=`<div class="fthink" id="fthink"><span id="fwant"></span></div><div class="feeder" id="feeder">${capyFrontSVG()}</div><div class="fplate">🍽️</div>`;
+  const feeder=$('#feeder'),want=$('#fwant');let done=false,help=0;
+  const eat=(w,b)=>{done=true;clearTimeout(help);b&&b.classList.add('ok');gSay(w);
+    const fl=document.createElement('span');fl.className='ffly';fl.innerHTML=pic(w.e);arena.appendChild(fl);
+    const a=arena.getBoundingClientRect(),t=$('#fthink').getBoundingClientRect(),f=feeder.getBoundingClientRect();
+    fl.style.left=(t.left-a.left+t.width/2)+'px';fl.style.top=(t.top-a.top+t.height/2)+'px';
+    requestAnimationFrame(()=>{fl.style.left=(f.left-a.left+f.width/2)+'px';fl.style.top=(f.top-a.top+f.height*.62)+'px';fl.style.transform='translate(-50%,-50%) scale(.4)'});
+    setTimeout(()=>{fl.remove();feeder.classList.remove('chomp');void feeder.offsetWidth;feeder.classList.add('chomp');gsfx.bonk();tone(660,.1,.1);tone(880,.2,.12);
+      const [x,y]=ctr(feeder);burst(x,y-20,['❤️','💕','✨'],8,90);floatText(x,y-70,'냠냠!')},520);
+    gGood(feeder,round)};
+  const round=()=>{
+    const w=GM.T[GM.idx];GM.target=w;done=false;want.innerHTML=pic(w.e);$('#fthink').classList.remove('pop');void $('#fthink').offsetWidth;$('#fthink').classList.add('pop');
+    gPrompt(V?`<b class="gK">🎤 누르고 영어로 말해 줘!</b><small>카피바라가 먹고 싶은 것</small>`:`<b class="gK">골라 줘!</b><small>카피바라가 먹고 싶은 것</small>`);
+    const ch=shuffle([w,...gOthers(w,2)]);
+    opts.innerHTML=ch.map(x=>`<button class="ropt${GM.abc&&!V?'':''}" data-id="${x.id}">${x.w}</button>`).join('');
+    opts.classList.toggle('vhide',V);if(V)help=gT(()=>{opts.classList.remove('vhide');opts.classList.add('vhelp')},6000);
+    opts.querySelectorAll('.ropt').forEach(b=>b.onclick=()=>{if(!GM||done)return;if(b.dataset.id===w.id)eat(w,b);else{gBad(b);b.disabled=true}});
+    act(feeder.querySelector?$('#lhost'):null,'nod',500);
+  };
+  if(V)GM.onVoice=alts=>{if(!done&&GM.target&&sayHit(GM.target.w,alts)){eat(GM.target,null);return true}return false};
   round();
 }
 
@@ -1412,7 +1547,7 @@ function micUI(slot,w,done){
   slot.innerHTML=`<div class="micbox"><button class="micbtn" id="micBtn"><span class="mi">🎤</span><span class="ml" id="micL">따라 말하기</span></button><div class="meter" id="meter">${'<i></i>'.repeat(7)}</div><button class="link" id="myVoice" hidden>▶ 내 목소리 다시 듣기</button></div>`;
   const btn=$('#micBtn'),lab=$('#micL'),bars=[...slot.querySelectorAll('.meter i')];let url=null;
   const parts=w.abc?[[NAME[w.l],'ph'],[w.w,'en']]:[[w.w,'en']];
-  const playMine=cb=>{if(!url)return cb&&cb();const a=new Audio(url);a.volume=1;a.onended=()=>cb&&cb();a.onerror=()=>cb&&cb();a.play().catch(()=>cb&&cb())};
+  const playMine=cb=>{if(!url)return cb&&cb();if(S.vfx&&S.vfx!=='normal')return playFx(url,S.vfx,cb);const a=new Audio(url);a.volume=1;a.onended=()=>cb&&cb();a.onerror=()=>cb&&cb();a.play().catch(()=>cb&&cb())};
   $('#myVoice').onclick=()=>{act($('#lhost'),'nod',500);playMine()};
   btn.onclick=async()=>{
     if(Mic.busy)return;
@@ -1427,6 +1562,7 @@ function micUI(slot,w,done){
       lab.textContent='들어 볼까?';
       say(parts,null,()=>setTimeout(()=>{lab.textContent='내 목소리!';playMine(()=>{
         Mic.busy=false;btn.classList.remove('busy');lab.textContent='다시 하기';$('#myVoice').hidden=false;
+        let fx=slot.querySelector('.fxslot');if(!fx){fx=document.createElement('div');fx.className='fxslot';slot.appendChild(fx)}fxBar(fx,url);
         act(h,'happy',1500);emote(h,'👏');const [x,y]=ctr(btn);burst(x,y,['👏','⭐','🎤'],10,110);sfx.ok();
         const m=rnd(VOICE_PRAISE);bubble(m);say([[m,'ko']]);done&&done(true);
       })},250));
@@ -1489,16 +1625,18 @@ function matchWords(words,alts,letter){
   }
   return best;
 }
+const GREET_SHORT=[{q:'Hello!',qk:'안녕!',a:'Hi!',ak:'안녕!'},{q:'Goodbye!',qk:'잘 가!',a:'Bye!',ak:'안녕!'},{q:"Let's play!",qk:'같이 놀자!',a:'OK!',ak:'좋아!'},{q:'Do you like English?',qk:'영어 좋아해?',a:'Yes!',ak:'응!'},{q:'Thank you!',qk:'고마워!',a:'Welcome!',ak:'천만에!'}].map((g,i)=>({...g,id:'gs'+i,tpl:'greet'}));
 function buildSpeak(lv,ci){
-  const W=unitWords(lv,ci),g=rnd(GREET),gg={...g,w:g.a,k:g.ak,convo:true,picH:''};
+  const W=unitWords(lv,ci),g=rnd(GREET_SHORT),gg={...g,w:g.a,k:g.ak,convo:true,picH:''};
+  const plain=W.filter(w=>!/[^a-z]/i.test(w.w));
   if(lv===0){
-    const G=ABCG[ci],Ls=G.all?shuffle(W).slice(0,5):W;
-    return [...Ls.map(w=>st('spLetter',w)),...shuffle(W.filter(w=>!/[^a-z]/i.test(w.w))).slice(0,3).map(w=>st('spWord',w)),st('spSent',gg)];
+    const G=ABCG[ci],Ls=G.all?shuffle(W).slice(0,4):W;
+    return [...Ls.map(w=>st('spLetter',w)),...shuffle(plain).slice(0,3).map(w=>st('spWord',w)),...(srAvail()?[st('sayPic',rnd(plain))]:[]),st('spSent',gg)];
   }
   const D=shuffle(makeDialogs(lv,ci)),ws=shuffle(W),d2=[];const used=new Set();
-  for(const d of D){if(d2.length>=4)break;if(used.has(d.src.id))continue;used.add(d.src.id);d2.push(d)}
-  while(d2.length<4)d2.push(rnd(D));
-  return [st('spWord',ws[0]),st('spWord',ws[1]),st('spSent',d2[0]),st('spAns',d2[1]),st('spWord',ws[2]),st('spSent',d2[2]),st('spAns',d2[3]),st('spSent',gg)];
+  for(const d of D){if(d2.length>=2)break;if(used.has(d.src.id))continue;used.add(d.src.id);d2.push(d)}
+  while(d2.length<2)d2.push(rnd(D));
+  return [st('spWord',ws[0]),st('spWord',ws[1]),st('cVoice',d2[0]),st('spWord',ws[2]),...(srAvail()?[st('sayPic',ws[3])]:[st('spWord',ws[3])]),st('cVoice',d2[1]),st('spWord',ws[4]),st('spSent',gg)].map(x=>(x.pool=D,x));
 }
 function speakStep(s,q,o){
   // o: {words:[...], letter, show:(html), pic, kor, bub, introKo, audio:[parts], q:질문(대답하기용)}
@@ -1557,7 +1695,8 @@ function speakStep(s,q,o){
 /* 1단계 새 단어: 맞게 따라 말해야 '알겠어!'가 열림
    음성 인식 → 맞으면 열림 / 3번 틀리면 '어른 확인' 버튼(부모가 들어 보고 열어 줄 수 있음)
    인식이 안 되는 기기: 녹음해서 따라 말하면 열림 / 마이크도 없으면 잠시 뒤 자동으로 열림 */
-function unlockGot(){const g=$('#gotit');if(!g||!g.disabled)return;g.disabled=false;g.textContent='알겠어!';g.classList.add('unlock')}
+function unlockGot(){const g=$('#gotit');if(!g||!g.disabled)return;g.disabled=false;g.textContent='알겠어!';g.classList.add('unlock');
+  const w=L&&L.queue[L.pos]&&L.queue[L.pos].w;if(w&&Mic.ok&&$('#micSlot')&&!$('#vpLink')){$('#micSlot').insertAdjacentHTML('beforeend','<button class="link vplink" id="vpLink">🐿️ 내 목소리로 장난치기</button>');$('#vpLink').onclick=()=>openVoicePlay(w.w)}}
 function voiceCheck(slot,o,onPass){
   if(!slot)return;
   const mode=SR&&!srBroken?'sr':(Mic.ok&&!Mic.denied?'rec':'self');
@@ -1599,6 +1738,111 @@ function voiceCheck(slot,o,onPass){
     rec._t=setTimeout(()=>{try{rec.stop()}catch(e){}},6000);
     try{rec.start()}catch(e){curRec=null;srBroken=true;voiceCheck(slot,o,onPass)}
   };
+}
+
+
+/* ================= 음성 도우미 ================= */
+const BROKEN_ERR=['not-allowed','service-not-allowed','network','audio-capture','language-not-supported'];
+const srAvail=()=>!!SR&&!srBroken;
+const sayHit=(word,alts)=>matchWords([word],alts,null).score>=1;
+// 버튼 눌러 한 번 듣기 (ui: {btn,lab,heard})
+function micListenOnce(ui,onAlts,onBroken){
+  if(curRec)return;try{synth&&synth.cancel()}catch(e){}micRelease();
+  let rec;try{rec=new SR()}catch(e){srBroken=true;return onBroken&&onBroken()}
+  rec.lang='en-US';rec.interimResults=true;rec.maxAlternatives=10;rec.continuous=false;curRec=rec;
+  const alts=[];let interim='',err='';
+  ui.btn.classList.add('on');if(ui.lab)ui.lab.textContent='듣고 있어… 말해 봐!';if(ui.heard)ui.heard.textContent='';
+  const h=$('#lhost');act(h,'lean',2500);emote(h,'👂');tone(880,0,.12,'sine',.12);
+  rec.onresult=e=>{let txt='';for(let i=0;i<e.results.length;i++){const r=e.results[i];txt+=r[0].transcript;for(let k=0;k<r.length;k++){const tx=r[k].transcript;if(tx&&!alts.includes(tx))alts.push(tx)}}interim=txt;if(ui.heard)ui.heard.textContent=txt};
+  rec.onerror=e=>{err=e.error||'error'};
+  rec.onend=()=>{if(curRec!==rec)return;curRec=null;clearTimeout(rec._t);ui.btn.classList.remove('on');if(ui.lab)ui.lab.textContent='다시 눌러서 말하기';
+    if(BROKEN_ERR.includes(err)){srBroken=true;toast(err==='network'?'말 인식은 인터넷이 필요해요.':'이 기기에서는 말 인식을 쓸 수 없어요. (크롬 마이크 권한을 확인해 주세요)');return onBroken&&onBroken()}
+    if(!alts.length&&interim)alts.push(interim);onAlts(alts)};
+  rec._t=setTimeout(()=>{try{rec.stop()}catch(e){}},6000);
+  try{rec.start()}catch(e){curRec=null;srBroken=true;onBroken&&onBroken()}
+}
+// 게임용: 계속 들으면서 들린 말을 넘겨줌 (끊기면 자동으로 다시 시작)
+let gStream=null;
+function stopStream(){if(gStream){gStream.on=false;try{gStream.rec&&gStream.rec.abort()}catch(e){}gStream=null}}
+function streamReset(){if(gStream&&gStream.rec){try{gStream.rec.abort()}catch(e){}}}
+function gListen(onAlts){
+  stopStream();if(!srAvail())return;try{synth&&synth.cancel()}catch(e){}micRelease();
+  const stt={on:true,rec:null};gStream=stt;
+  const go=()=>{
+    if(!stt.on)return;let rec;try{rec=new SR()}catch(e){srBroken=true;stt.on=false;return}
+    rec.lang='en-US';rec.interimResults=true;rec.maxAlternatives=5;rec.continuous=true;stt.rec=rec;let err='';
+    rec.onresult=e=>{const alts=[];let txt='';for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];txt+=r[0].transcript;for(let k=0;k<r.length;k++)alts.push(r[k].transcript)}
+      const vh=$('#vheard');if(vh)vh.textContent=txt;if(GM)onAlts(alts)};
+    rec.onerror=e=>{err=e.error||''};
+    rec.onend=()=>{if(!stt.on)return;if(BROKEN_ERR.includes(err)){srBroken=true;stt.on=false;toast('말 인식이 안 돼서 버튼으로 해요.');document.querySelectorAll('.ropts.vhide').forEach(o=>o.classList.remove('vhide'));return}setTimeout(go,200)};
+    try{rec.start()}catch(e){setTimeout(go,500)}
+  };
+  go();
+}
+
+
+/* ================= 목소리 효과 (다람쥐·거인·로봇·메아리) ================= */
+const FXS=[['normal','🙂','그대로'],['squirrel','🐿️','다람쥐'],['giant','🐻','거인'],['robot','🤖','로봇'],['echo','🏔️','메아리']];
+const fxCache={};
+async function playFx(url,fx,onEnd){
+  const a=actx();if(!a||!url)return onEnd&&onEnd();
+  let ended=false;const end=()=>{if(ended)return;ended=true;onEnd&&onEnd()};
+  try{
+    if(!fxCache[url])fxCache[url]=await a.decodeAudioData(await (await fetch(url)).arrayBuffer());
+    const src=a.createBufferSource();src.buffer=fxCache[url];setTimeout(end,fxCache[url].duration/(fx==='giant'?.62:fx==='squirrel'?1.75:1)*1000+(fx==='echo'?1200:150));const out=a.createGain();out.gain.value=1.2;out.connect(a.destination);
+    if(fx==='squirrel')src.playbackRate.value=1.75;
+    if(fx==='giant')src.playbackRate.value=.62;
+    if(fx==='robot'){const g=a.createGain();g.gain.value=0;const o=a.createOscillator();o.type='square';o.frequency.value=48;const og=a.createGain();og.gain.value=.9;o.connect(og).connect(g.gain);src.connect(g).connect(out);o.start();src.onended=()=>{try{o.stop()}catch(e){}end()};src.start();return}
+    if(fx==='echo'){const d=a.createDelay(1);d.delayTime.value=.3;const fb=a.createGain();fb.gain.value=.5;src.connect(out);src.connect(d);d.connect(fb).connect(d);d.connect(out);src.start();return}
+    src.connect(out);src.start();
+  }catch(e){const au=new Audio(url);au.playbackRate=fx==='squirrel'?1.75:fx==='giant'?.62:1;try{au.preservesPitch=false;au.mozPreservesPitch=false;au.webkitPreservesPitch=false}catch(_){}au.onended=au.onerror=end;au.play().catch(end)}
+}
+function fxBar(el,url){
+  el.innerHTML=`<div class="fxbar">${FXS.map(([k,i,n])=>`<button class="fxb" data-fx="${k}"><span>${i}</span><small>${n}</small></button>`).join('')}</div>`;
+  el.querySelectorAll('.fxb').forEach(b=>b.onclick=()=>{playFx(url,b.dataset.fx);b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');const [x,y]=ctr(b);burst(x,y,[b.querySelector('span').textContent,'✨'],5,60)});
+}
+/* 목소리 놀이터: 아무 단어나 말하고 재밌는 목소리로 들어 보기 */
+function openVoicePlay(hintWord){
+  if(!Mic.ok){toast('이 화면에서는 마이크를 쓸 수 없어요. 받은 파일을 크롬으로 열면 돼요.');return}
+  const ws=hintWord?[hintWord]:shuffle(ALLW.filter(w=>w.lv===Math.max(1,S.view))).slice(0,6).map(w=>w.w);
+  $('#vpPanel').innerHTML=`<div class="ph"><h2>🎙️ 목소리 놀이</h2><button class="link" id="vpX">닫기</button></div>
+   <div class="catHead"><div class="critter" data-host="pipi">${charSVG(HOSTS.pipi)}</div><div class="say">영어로 말하고 재밌는 목소리로 들어 봐!</div></div>
+   <div class="vpw">${ws.map(w=>`<button class="sw vpword">${esc(w)}</button>`).join('')}</div>
+   <div class="vprec"><button class="micbtn" id="vpRec"><span class="mi">🎤</span><span class="ml" id="vpL">녹음하기</span></button><div class="meter" id="vpMeter">${'<i></i>'.repeat(7)}</div></div>
+   <div id="vpFx"></div>`;
+  $('#voicePlay').hidden=false;Music.duck(true);
+  $('#vpX').onclick=()=>{$('#voicePlay').hidden=true;micRelease();Music.duck(false)};
+  $('#vpPanel').querySelectorAll('.vpword').forEach(b=>b.onclick=()=>say([[b.textContent,'en']],$('#vpPanel .critter')));
+  const bars=[...$('#vpMeter').querySelectorAll('i')];
+  $('#vpRec').onclick=async()=>{
+    if(Mic.busy)return;Mic.busy=true;const btn=$('#vpRec');btn.classList.add('rec');$('#vpL').textContent='말해 봐!';tone(880,0,.12,'sine',.12);
+    const url=await recordVoice(3000,lv=>bars.forEach((b,i)=>b.style.transform=`scaleY(${Math.max(.15,Math.min(1,lv*(1.4-Math.abs(i-3)*.22)))})`));
+    Mic.busy=false;btn.classList.remove('rec');bars.forEach(b=>b.style.transform='');$('#vpL').textContent='다시 녹음';
+    if(!url){toast('마이크를 쓸 수 없어요. 크롬에서 마이크 권한을 허용해 주세요.');return}
+    fxBar($('#vpFx'),url);const f=rnd(['squirrel','giant','robot']);playFx(url,f);
+    const c=$('#vpPanel .critter');act(c,'happy',1200);emote(c,FXS.find(x=>x[0]===f)[1]);
+  };
+}
+
+
+function voiceAnswer(s,o){
+  const btn=$('#bigmic'),lab=$('#mlab'),heard=$('#heard'),h=$('#lhost');
+  btn.onclick=()=>{if(L.lock)return;micListenOnce({btn,lab,heard},alts=>{
+    if(!alts.length){bubble('잘 안 들렸어. 조금 더 크게 말해 봐!');act(h,'puzzle',800);return}
+    const m=matchWords(o.words,alts,null),ok=m.score>=1||(o.alt&&matchWords(o.alt.split(' '),alts,null).score>=.6);
+    s.heard=m.heard;
+    if(ok){heard.classList.add('good');o.onPass&&o.onPass();answer(true,s);return}
+    s.tries++;heard.classList.add('bad');setTimeout(()=>heard.classList.remove('bad'),900);
+    if(s.tries>=3){s.retry=true;answer(false,s);return}
+    sfx.no();act(h,'sweat',1200);emote(h,'💦');bubble(rnd(['아깝다! 한 번 더!','조금 더 또박또박!','힌트를 써 봐도 돼!']));
+    if(s.tries>=2&&o.audio)setTimeout(()=>say(o.audio),600);
+  },()=>R[s.t](s,$('#q')))};
+}
+function choiceFallback(s,q,ans,opts,topHTML,qText){
+  s.ans=ans;
+  q.innerHTML=`${topHTML}<div class="opts">${opts.map(k=>`<button class="sw opt" data-c="${esc(k)}">${esc(k)}</button>`).join('')}</div>`;
+  if(qText)say([[qText,'en']]);
+  q.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(L.lock)return;const ok=b.dataset.c===ans;b.classList.add(ok?'ok':'no');say([[b.dataset.c,'en']]);answer(ok,s)});
 }
 
 /* ================= 레슨 진행 ================= */
@@ -1687,6 +1931,29 @@ addEventListener('keydown',e=>{
 });
 
 const R={
+  // [말로 답하기] 그림만 보고 영어로 말하기 (💡 힌트: 소리 → 글자)
+  sayPic(s,q){
+    const w=s.w;s.tries=s.tries||0;bubble('그림을 보고 영어로 말해 봐! 🎤');
+    if(!srAvail())return choiceFallback(s,q,w.w,shuffle([w.w,...shuffle(L.W.filter(x=>x.w!==w.w&&!/[^a-z]/i.test(x.w))).slice(0,2).map(x=>x.w)]),`<div class="pic big">${pic(w.e)}</div><div class="kor">${w.k}</div>`);
+    q.innerHTML=`<div class="pic big">${pic(w.e)}</div><div class="kor">${w.k}</div><div class="row" id="hintRow"><button class="hintbtn" id="hint">💡 힌트</button></div>
+      <div class="spmic"><button class="bigmic" id="bigmic"><span class="mw"></span><span class="mi">🎤</span></button><div class="mlab" id="mlab">눌러서 말하기</div><div class="heard" id="heard"></div></div><button class="link" id="cant">지금은 말할 수 없어요</button>`;
+    say([['이건 영어로 뭘까?','ko']]);
+    let h=0;$('#hint').onclick=()=>{h++;if(h===1){say([[w.w,'en']]);$('#hint').textContent='💡 글자 힌트'}else{$('#hintRow').insertAdjacentHTML('afterbegin',`<b class="hintw">${esc(w.w)}</b>`);$('#hint').hidden=true}};
+    $('#cant').onclick=()=>{stopListen();L.correct++;next()};
+    voiceAnswer(s,{words:[w.w],audio:[[w.w,'en']]});
+  },
+  // [회화] 캐릭터 질문에 한 단어로 대답하기 → 맞으면 캐릭터가 문장으로 다시 말해 줌
+  cVoice(s,q){
+    const d=s.w;s.tries=s.tries||0;bubbleHTML(`<b class="en">${d.q}</b><small>${d.qk} — 한 단어로 대답해 봐!</small>`);
+    const keys=shuffle([d.key,...shuffle([...new Set(s.pool.filter(x=>x.key&&x.key!==d.key).map(x=>x.key))]).slice(0,2)]);
+    if(!srAvail())return choiceFallback(s,q,d.key,keys,`<div class="cpic">${d.picH}</div>`,d.q);
+    q.innerHTML=`<div class="cpic">${d.picH}</div><div class="me"><span class="meav">🧒</span><span class="mebub">🎤 <span class="blank" id="blank">?</span></span></div>
+      <div class="spmic"><button class="bigmic" id="bigmic"><span class="mw"></span><span class="mi">🎤</span></button><div class="mlab" id="mlab">눌러서 대답하기</div><div class="heard" id="heard"></div></div>
+      <button class="link" id="cant">지금은 말할 수 없어요</button>`;
+    say([[d.q,'en']]);
+    $('#cant').onclick=()=>{stopListen();L.correct++;next()};
+    voiceAnswer(s,{words:[d.key],alt:d.a,audio:[[d.key,'en']],onPass:()=>{const b=$('#blank');b.textContent=d.key;b.classList.add('fill')}});
+  },
   // [말하기] 단어 말하기
   spWord(s,q){const w=s.w;speakStep(s,q,{words:[w.w],show:'',pic:`<span class="pic">${pic(w.e)}</span>`,kor:w.k,bub:'이 단어를 말해 보세요',introKo:'따라 말해 봐!',audio:[[w.w,'en']],wobj:w})},
   // [말하기] 알파벳 글자 이름 말하기
@@ -1787,6 +2054,10 @@ const R={
     const i=d.a.lastIndexOf(d.key),html=d.a.slice(0,i)+'<span class="blank" id="blank">?</span>'+d.a.slice(i+d.key.length);
     q.innerHTML=`<div class="cpic">${d.picH}</div><div class="me"><span class="meav">🧒</span><span class="mebub">${html}</span></div><div class="opts">${shuffle([d.key,...keys]).map(k=>`<button class="sw opt" data-c="${k}">${k}</button>`).join('')}</div>`;
     say([[d.q,'en']]);
+    if(srAvail()){q.insertAdjacentHTML('beforeend','<div class="vsmall"><button class="bigmic vcm" id="bigmic"><span class="mw"></span><span class="mi">🎤</span></button><div><div class="mlab" id="mlab">말로 골라도 돼!</div><div class="heard" id="heard"></div></div></div>');
+      $('#bigmic').onclick=()=>{if(L.lock)return;micListenOnce({btn:$('#bigmic'),lab:$('#mlab'),heard:$('#heard')},alts=>{
+        const b=[...q.querySelectorAll('.opt')].find(o=>sayHit(o.dataset.c,alts));s.heard=alts[0]||'';
+        if(b)b.click();else bubble('보기에 있는 단어를 말해 봐!')},()=>{const v=q.querySelector('.vsmall');v&&v.remove()})}}
     q.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(L.lock)return;const ok=b.dataset.c===d.key,bl=$('#blank');
       say([[b.dataset.c,'en']]);bl.textContent=b.dataset.c;bl.classList.add('fill');b.classList.add(ok?'ok':'no');
       if(!ok){bl.classList.add('no');setTimeout(()=>{bl.textContent=d.key;bl.classList.remove('no')},700)}answer(ok,s)});
@@ -1928,7 +2199,7 @@ function answer(ok,s){
   const sh=$('#sheet');sh.className='sheet '+(ok?'ok':'no');
   $('#shT').textContent=s.t==='mg'?`${GAMES[s.game].i} ${GAMES[s.game].n} 끝!`:isPairs?'짝맞추기 성공!':(ok?msg:'괜찮아! 정답은…');
   $('#shS').innerHTML=w&&w.convo?(s.t==='cMeaning'?`<b class="sent-b">${w.q}</b><span>${w.qk}</span>`:`<span class="cq">${w.q}</span><b class="sent-b">→ ${w.a}</b><span>${w.ak}</span>`):s.t==='mg'?`<span>⭐ ${s.hits}/6 성공!</span>`:isPairs?`<span>${s.ws.length}쌍을 모두 찾았어!</span>`:w.abc?`<b class="abcw">${w.U} ${w.l}</b><span class="se">${pic(w.e)}</span><span>${w.w} · ${w.k}</span>`:`<span class="se">${pic(w.e)}</span><b>${w.w}</b><span>${w.k}</span>`;
-  if(isSp&&s.heard)$('#shS').insertAdjacentHTML('beforeend',`<span class="cq">🎤 내가 한 말: "${esc(s.heard)}"</span>`);
+  if((isSp||s.t==='sayPic'||s.t==='cVoice'||s.t==='cBlank')&&s.heard)$('#shS').insertAdjacentHTML('beforeend',`<span class="cq">🎤 내가 한 말: "${esc(s.heard)}"</span>`);
   $('#shBtn').textContent=ok?'계속':'알겠어';
   sh.hidden=false;
   if(s.t==='mg')say([['보너스 게임 끝! 잘했어!','ko']]);else if(isPairs)say([['짝맞추기 성공!','ko']]);
@@ -2014,6 +2285,7 @@ function peek(){
   setTimeout(()=>{p.classList.remove('up');peekBusy=false},4200);
 }
 setInterval(peek,22000);setTimeout(peek,6000);
+if(location.protocol!=='file:')$('#homeLink').hidden=false;
 renderHome();
 setHost($('#shost'),'momo');
 $('#startBtn').onclick=()=>{$('#startBox').hidden=true;sfx.tap();soundCheck(true);if(S.music)Music.on()};
